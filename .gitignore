@@ -1,0 +1,16 @@
+#   Ignore List   #
+###################
+*.class
+bin
+gen
+stow
+*.komodoproject
+local.properties
+
+
+#     OS Files       #
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
