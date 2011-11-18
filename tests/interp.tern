@@ -1,0 +1,17 @@
+import left(deg)
+
+import right(deg)
+
+process main:
+{
+   print 5 + 5
+   print 2 * 3
+   i = 10
+   while i > 0:
+   {
+      print i
+      left(i * 10)
+      right(i * -10)
+      i = i - 1
+   }
+}

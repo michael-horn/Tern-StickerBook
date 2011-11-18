@@ -1,0 +1,57 @@
+grumble()
+-----------------
+trace grumble
+load-address grumble
+call
+pop
+=================
+bounce(50)
+-----------------
+push 50
+trace bounce
+load-address bounce
+call
+pop
+=================
+a = 33
+moveTo(a, 100)
+-----------------
+push 33
+push 0
+store-global
+push 0
+load-global
+push 100
+trace moveTo
+load-address moveTo
+call
+pop
+=================
+a = true
+b = false
+c = true
+zoom(a or b, not c, 300)
+-----------------
+push 1
+push 0
+store-global
+push 0
+push 1
+store-global
+push 1
+push 2
+store-global
+push 0
+load-global
+push 1
+load-global
+or
+push 2
+load-global
+not
+push 300
+trace zoom
+load-address zoom
+call
+pop
+=================

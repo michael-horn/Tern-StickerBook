@@ -1,0 +1,86 @@
+5 + 5
+-----------------
+push 5
+push 5
++
+=================
+4 - 4
+-----------------
+push 4
+push 4
+-
+=================
+8 + (7 - (6 + 5))
+-----------------
+push 8
+push 7
+push 6
+push 5
++
+-
++
+=================
+((8 + 7) - 6) + 5
+-----------------
+push 8
+push 7
++
+push 6
+-
+push 5
++
+=================
+3 * 2 + 4
+-----------------
+$PARSE ERROR
+=================
+-8.33 + 2.5
+-----------------
+push -8.33
+push 2.5
++
+=================
+5 + 4 - 3 + 2
+-----------------
+$PARSE ERROR
+=================
+a + b
+-----------------
+$PARSE ERROR - Unbound variable
+=================
+a = 10
+b = 20
+a + b
+-----------------
+push 10
+push 0
+store-global
+push 20
+push 1
+store-global
+push 0
+load-global
+push 1
+load-global
++
+=================
+about - below
+-----------------
+$PARSE ERROR - Unbound variable
+=================
+about = 44
+below = 2.5
+about - below
+-----------------
+push 44
+push 0
+store-global
+push 2.5
+push 1
+store-global
+push 0
+load-global
+push 1
+load-global
+-
+=================

@@ -1,0 +1,122 @@
+def grumble():
+{
+   left(30)
+   print 30
+}
+-----------------
+function grumble
+push 0
+frame
+push 30
+trace left
+load-address left
+call
+pop
+push 30
+print
+push 0
+return
+=================
+def bounce(height):
+{
+   print height
+}
+-----------------
+function bounce
+push 1
+frame
+push 0
+load-frame
+print
+push 0
+return
+=================
+def moveTo(x, y):
+{
+   print x
+   print y
+}
+-----------------
+function moveTo
+push 2
+frame
+push 0
+load-frame
+print
+push 1
+load-frame
+print
+push 0
+return
+=================
+def zoom(a, b, c):
+{
+   wait a
+   print b
+   print c
+}
+-----------------
+function zoom
+push 3
+frame
+push 0
+load-frame
+timer
+:sleep0
+yield
+load-address :done0
+if-timer
+load-address :sleep0
+goto
+:done0
+push 1
+load-frame
+print
+push 2
+load-frame
+print
+push 0
+return
+=================
+PI = 3.14159
+def leftTurn():
+{
+   left( 0.5 * PI )
+}
+-----------------
+push 3.14159
+push 0
+store-global
+function leftTurn
+push 0
+frame
+push 0.5
+push 0
+load-global
+*
+trace left
+load-address left
+call
+pop
+push 0
+return
+=================
+process shake:
+{
+   print 0.5
+}
+-----------------
+process shake
+push 0.5
+print
+stop
+=================
+import showImage(id, transparency)
+-----------------
+function showImage
+push 2
+frame
+push 2
+remote showImage
+push 0
+return

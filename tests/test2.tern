@@ -1,0 +1,74 @@
+true and false
+-----------------
+push 1
+push 0
+and
+=================
+false or true
+-----------------
+push 0
+push 1
+or
+=================
+not true
+-----------------
+push 1
+not
+=================
+(a or b) and c
+-----------------
+$PARSE ERROR - Unbound variable
+=================
+a = true
+b = false
+c = true
+(a or b) and c
+-----------------
+push 1
+push 0
+store-global
+push 0
+push 1
+store-global
+push 1
+push 2
+store-global
+push 0
+load-global
+push 1
+load-global
+or
+push 2
+load-global
+and
+=================
+not ((true and false) or true)
+-----------------
+push 1
+push 0
+and
+push 1
+or
+not
+=================
+(3 + 1) >= 4
+-----------------
+push 3
+push 1
++
+push 4
+>=
+=================
+(3 + 1) < (2 * 2)
+-----------------
+push 3
+push 1
++
+push 2
+push 2
+*
+<
+=================
+3 + 1 != 4
+-----------------
+$PARSE ERROR

@@ -1,0 +1,108 @@
+while true:
+{
+   left(30)
+   print 30
+}
+-----------------
+:while0
+push 1
+load-address :done0
+if-false
+push 30
+trace left
+load-address left
+call
+pop
+push 30
+print
+load-address :while0
+goto
+:done0
+=================
+while a or b:
+{
+   print 3
+}
+-----------------
+$PARSE ERROR
+=================
+a = true
+b = false
+while a or b:
+{
+   print 3
+   a = false
+}
+-----------------
+push 1
+push 0
+store-global
+push 0
+push 1
+store-global
+:while0
+push 0
+load-global
+push 1
+load-global
+or
+load-address :done0
+if-false
+push 3
+print
+push 0
+push 0
+store-global
+load-address :while0
+goto
+:done0
+=================
+a = 0
+while a < 5:
+{
+   b = 0
+   while b < 3:
+   {
+      b = b + 1
+   }
+   a = a + 1
+}
+-----------------
+push 0
+push 0
+store-global
+:while0
+push 0
+load-global
+push 5
+<
+load-address :done0
+if-false
+push 0
+push 1
+store-global
+:while1
+push 1
+load-global
+push 3
+<
+load-address :done1
+if-false
+push 1
+load-global
+push 1
++
+push 1
+store-global
+load-address :while1
+goto
+:done1
+push 0
+load-global
+push 1
++
+push 0
+store-global
+load-address :while0
+goto
+:done0
