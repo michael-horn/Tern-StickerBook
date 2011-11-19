@@ -64,10 +64,10 @@ public class Program {
 	}
    
    
-
-
    public void addStatement(Statement s) {
       this.statements.add(s);
+      expandBoundingBox(s.getTopCode().getCenterX(),
+                        s.getTopCode().getCenterY());
    }
 
 
