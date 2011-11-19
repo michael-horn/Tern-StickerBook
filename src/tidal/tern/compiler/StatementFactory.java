@@ -26,6 +26,11 @@ package tidal.tern.compiler;
 
 import java.util.List;
 import topcodes.*;
+import android.content.res.XmlResourceParser;
+import android.util.Log;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 
 
 public class StatementFactory {
@@ -33,17 +38,6 @@ public class StatementFactory {
 
    protected static List<Statement> stypes = new java.util.ArrayList<Statement>();
    
-   protected static int COMPILE_ID = 0;
-	
-	
-/**
- * Registers a new statement type.  This must be called for each
- * statement type when an application is loaded.
- */
-   public static void registerStatementType(Statement s) {
-      stypes.add(s);
-   }
-	
 	
 /**
  * Called by the tangible compiler to generate new statements
@@ -52,11 +46,126 @@ public class StatementFactory {
    public static Statement createStatement(TopCode top) {
       for (Statement s : stypes) {
          if (s.getCode() == top.getCode()) {
-            Statement clone = s.newInstance(top);
-            clone.setCompileID(COMPILE_ID++);
-            return clone;
+            return s.newInstance(top);
          }
       }
       return null;
    }
+   
+   
+/**
+ *  Load statements from XML resource file
+ */
+   public static void loadStatements(XmlResourceParser xml) throws CompileException {
+      stypes.clear();
+      
+      try {
+         Statement s = null;
+         
+         while (true) {
+            
+            xml.next();
+            switch (xml.getEventType()) {
+               
+               case XmlPullParser.START_TAG:
+                  if ("statement".equals(xml.getName())) {
+                     s = newStatement(xml);
+                  }
+                  else if (s != null) {
+                     if ("code".equals(xml.getName())) {
+                        s.setCompileText(cleanWhitespace(xml.nextText()));
+                     }
+                     else if ("plug".equals(xml.getName()) ||
+                              "socket".equals(xml.getName()) ||
+                              "param".equals(xml.getName())) {
+                        s.addConnector(newConnector(xml));
+                     }
+                  }
+                  break;
+   
+               
+               case XmlPullParser.END_TAG:
+                  if ("statement".equals(xml.getName())) {
+                     stypes.add(s);
+                     s = null;
+                  }
+                  break;
+               
+               
+               case XmlPullParser.END_DOCUMENT:
+                  return;
+            }
+         }
+      } catch (Exception x) {
+         throw new CompileException(x);
+      }
+   }
+   
+   
+   private static Statement newStatement(XmlResourceParser xml) throws Exception {
+         
+      // Create a Statement of the appropriate type
+      String cname = xml.getAttributeValue(null, "class");
+      if (cname == null) cname = "tidal.tern.compiler.Statement";
+      Statement s = (Statement)(Class.forName(cname)).newInstance();
+      
+
+      // Set the name and topcode value
+      s.setName(xml.getAttributeValue(null, "name"));
+      s.setTopCode(new TopCode(xml.getAttributeIntValue(null, "code", 0)));
+      s.setStartStatement(toBoolean(xml.getAttributeValue(null, "start")));
+      return s;
+   }
+   
+   
+   private static Connector newConnector(XmlResourceParser xml) {
+      int type = Connector.TYPE_IN;
+      if ("socket".equals(xml.getName())) {
+         type = Connector.TYPE_IN;
+      } else if ("plug".equals(xml.getName())) {
+         type = Connector.TYPE_OUT;
+      } else if ("param".equals(xml.getName())) {
+         type = Connector.TYPE_PARAM;
+      }
+      
+      String name = xml.getAttributeValue(null, "name");
+      if (name == null) name = "";
+      
+      String sdx = xml.getAttributeValue(null, "dx");
+      String sdy = xml.getAttributeValue(null, "dy");
+      
+      return new Connector(type, name, toFloat(sdx), toFloat(sdy));
+   }
+   
+   
+   private static float toFloat(String s) {
+      if (s == null) return 0.0f;
+      try {
+         return Float.parseFloat(s);
+      } catch (Exception x) {
+         return 0.0f;
+      }
+   }
+   
+   
+   private static boolean toBoolean(String s) {
+      if ("true".equals(s) || "yes".equals(s)) {
+         return true;
+      } else {
+         return false;
+      }
+   }
+   
+
+   private static String cleanWhitespace(String s) {
+      if (s == null) return "";
+      String [] lines = s.split("\n");
+      String result = "";
+      
+      for (int i=0; i<lines.length; i++) {
+         result += lines[i].trim() + "\n";
+      }
+      return result;
+   }
 }
+
