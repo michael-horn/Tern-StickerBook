@@ -24,8 +24,9 @@
  */
 package tidal.tern.compiler;
 
-import topcodes.*;
+import java.util.List;
 import java.io.PrintWriter;
+import topcodes.TopCode;
 
 
 /**
@@ -38,48 +39,84 @@ import java.io.PrintWriter;
  * @author Michael Horn
  * @version $Revision: 1.8 $, $Date: 2008/03/18 15:08:39 $
  */
-public abstract class Statement {
+public class Statement {
+   
+   
+   private static int COMPILE_ID = 0;
 
-   /** Next statement in the flow-of-control chain */
-   protected Statement next;
+
+   /** Name of the statement */
+   protected String name;
 
    /** TopCode for this statement */
    protected TopCode top;
+   
+   /** Code that this statement generates */
+   protected String text;
+   
+   /** Is this statement a start statement */
+   protected boolean start;
 
-   /** Statement's compile-time ID number */
+   /** Statement's unique compile-time ID number */
    protected int c_id;
    
+   /** List of connectors (ingoing, outgoing, and params) for this statement */
+   protected List<Connector> connectors;
    
-   public Statement(TopCode top) {
-      this.next  = null;
-      this.top   = top;
-      this.c_id  = -1;
+   
+   
+   public Statement() {
+      this.name = "";
+      this.top  = null;
+      this.text = "";
+      this.start = false;
+      this.c_id = COMPILE_ID++;
+      this.connectors = new java.util.ArrayList();
    }
 
    
-/**
- * Name of the statement
- */
-   public abstract String getName();
+   public Statement(TopCode top) {
+      this();
+      this.top = top;
+   }
 
 
-/**
- * The unique identifier for this statement type.  This number
- * is encoded in a statement's topcode.
- */
-   public abstract int getCode();
+   public void addConnector(Connector con) {
+      this.connectors.add(con);
+   }
+   
+   
+   public List<Connector> getConnectors() {
+      return this.connectors;
+   }
 
    
 /**
  * Translates a tangible statement into a text-based representation
  */
-   public abstract void compile(PrintWriter out) throws CompileException;
+   public void compile(PrintWriter out) throws CompileException {
+      out.println(this.text);
+      for (Connector c : connectors) {
+         if (c.isOutgoing() && c.hasConnection()) {
+            c.getConnection().compile(out);
+         }
+      }
+   }
 
 
 /**
  * Factory method. Creates a new statement of the correct type.
  */
-   public abstract Statement newInstance(TopCode top);
+   public Statement newInstance(TopCode top) {
+      Statement s = new Statement(top);
+      s.name = this.name;
+      s.text = this.text;
+      s.start = this.start;
+      for (Connector c : connectors) {
+         s.addConnector(c.clone());
+      }
+      return s;
+   }
 
 
    public String toString() {
@@ -87,42 +124,58 @@ public abstract class Statement {
    }
 
 
-   public TopCode getTopCode() {
-      return top;
+   public String getName() {
+      return name;
+   }
+   
+   
+   public void setName(String name) {
+      this.name = name;
    }
 
 
-   public void setCompileID(int c_id) {
-      this.c_id = c_id;
+   public TopCode getTopCode() {
+      return top;
+   }
+   
+   
+   public void setTopCode(TopCode top) {
+      this.top = top;
+   }
+   
+   
+   public int getCode() {
+      return (top == null)? 0 : top.getCode();
+   }
+   
+   
+   public boolean hasTopCode() {
+      return this.top != null;
+   }
+   
+   
+   public String getCompileText() {
+      return this.text;
+   }
+
+   
+   public void setCompileText(String text) {
+      this.text = text;
+   }
+   
+   
+   public boolean isStartStatement() {
+      return this.start;
+   }
+   
+   
+   public void setStartStatement(boolean start) {
+      this.start = start;
    }
 
 
    public int getCompileID() {
       return this.c_id;
-   }
-
-   
-/**
- * Used by compiler to connect the next statement in the flow chain.
- */
-   protected void connect(Statement next) {
-	   this.next = next;
-   }
-
-
-	protected void connect(Statement next, String name) {
-		this.next = next;
-	}
-
-
-/**
- * Called by the compiler. Registers the top-relative location of
- * this statement's socket and connector.  Statements with
- * non-standard shapes should override this function.
- */
-   public void registerConnections(ConnectionMap map) {
-      map.addSocket(this, (float)(-1.6), (float)(0.25));
-      map.addConnector(this, "next", (float)(1.8), (float)(0.25));
    }
 }   
 
