@@ -96,6 +96,11 @@ public class Statement {
  */
    public void compile(PrintWriter out) throws CompileException {
       out.println(this.text);
+      compileNext(out);
+   }
+   
+   
+   protected void compileNext(PrintWriter out) throws CompileException {
       for (Connector c : connectors) {
          if (c.isOutgoing() && c.hasConnection()) {
             c.getConnection().compile(out);
