@@ -120,10 +120,6 @@ public class Program {
  * Returns a bounding box around a program in a bitmap image.
  */
    public RectF getBounds() {
-      return new RectF(
-            (float)(xmin - 100),
-            (float)(ymin - 100),
-            (float)(xmax - xmin + 200),
-            (float)(ymax - ymin + 200));
+      return new RectF(xmin - 100, ymin - 100, xmax + 100, ymax + 100);
    }
 }
