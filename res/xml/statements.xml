@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<statements>
+   
+   <!-- BEGIN -->
+   <statement code="569" name="Begin" start="true" class="tidal.tern.language.Begin">
+      <plug dx="3" dy="0" name="next" />
+   </statement>
+   
+   
+   <!-- END -->
+   <statement code="369" name="End">
+      <socket name="prev" />
+   </statement>
+   
+   
+   
+   <!-- JUMP (growl) -->
+   <statement code="307" name="Jump">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print jump
+         wait 1000
+      </code>
+   </statement>
+   
+   
+   <!-- RUN (backward) -->
+   <statement code="185" name="Run">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print run
+         wait 1000
+      </code>
+   </statement>
+   
+   
+   
+   <!-- WALK (forward) -->
+   <statement code="405" name="Walk">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print walk
+         wait 1000
+      </code>
+   </statement>
+   
+
+   
+   <!-- SHAKE -->
+   <statement code="557" name="Shake">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print shake
+         wait 1000
+      </code>
+   </statement>
+   
+   
+      
+   <!-- SLEEP (beep) -->
+   <statement code="661" name="Sleep">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print sleep
+         wait 1000
+      </code>
+   </statement>
+   
+   
+      
+   <!-- SIT (song) -->
+   <statement code="397" name="Sit">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print sit
+         wait 1000
+      </code>
+   </statement>
+   
+   
+      
+   <!-- STAND (left) -->
+   <statement code="1189" name="Stand">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print stand
+         wait 1000
+      </code>
+   </statement>
+   
+   
+      
+   <!-- SPIN (spin) -->
+   <statement code="331" name="Spin">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         print spin
+         wait 1000
+      </code>
+   </statement>
+              
+</statements>
