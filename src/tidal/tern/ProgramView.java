@@ -138,6 +138,6 @@ public class ProgramView extends View {
       font.setStyle(Style.FILL);
       font.setTextSize(40);
       font.setTextAlign(Paint.Align.CENTER);
-      canvas.drawText(tern.getProgramStatus(), 15, h/2, font);
+      //canvas.drawText(tern.getProgramStatus(), 15, h/2, font);
    }
 }

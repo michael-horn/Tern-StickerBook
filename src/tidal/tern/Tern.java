@@ -1,3 +1,27 @@
+/*
+ * @(#) CompileException.java
+ * 
+ * Tern Tangible Programming Language
+ * Copyright (c) 2011 Michael S. Horn
+ * 
+ *           Michael S. Horn (michael.horn@tufts.edu)
+ *           Northwestern University
+ *           2120 Campus Drive
+ *           Evanston, IL 60613
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License (version 2) as
+ * published by the Free Software Foundation.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 package tidal.tern;
 
 import java.io.File;
@@ -7,13 +31,16 @@ import java.util.List;
 
 import android.net.Uri;
 import android.content.Intent;
+import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -30,8 +57,8 @@ import tidal.tern.compiler.*;
 
 
 
-public class Tern extends Activity implements OnClickListener, Runnable
-{
+public class Tern extends Activity implements OnClickListener, Runnable {
+   
    public static final String TAG = "TernMob";
    
    public static final int CAMERA_PIC_REQUEST = 2500;
@@ -75,9 +102,20 @@ public class Tern extends Activity implements OnClickListener, Runnable
       
       setContentView(R.layout.main);
       
-      this.view = (ProgramView)findViewById(R.id.ProgramView);
-      this.view.setTern(this);
+      try {
+         Log.i(TAG, "Loading statements");
+         XmlResourceParser xml = getResources().getXml(R.xml.statements);
+         Log.i(TAG, "got resource file");
+         StatementFactory.loadStatements(xml);
+         Log.i(TAG, "loaded");
+      } catch (CompileException cx) {
+         Log.e(TAG, cx.getMessage());
+      }
+
+      //this.view = (ProgramView)findViewById(R.id.ProgramView);
+      //this.view.setTern(this);
    }
+   
    
    protected void onPause() {
       super.onPause();
@@ -90,10 +128,15 @@ public class Tern extends Activity implements OnClickListener, Runnable
    public void onClick(View view) {
       if (compiling) return;
       try {
+         /*
          Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
          intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
          Log.i(TAG, String.valueOf(Uri.fromFile(temp)));
          startActivityForResult(intent, CAMERA_PIC_REQUEST);
+         */
+         BitmapDrawable test = (BitmapDrawable)res.getDrawable(R.drawable.test);
+         Bitmap bitmap = test.getBitmap();
+         
       } catch (Exception x) {
          Log.e(TAG, "Save file error " + x);
       }
@@ -165,31 +208,4 @@ public class Tern extends Activity implements OnClickListener, Runnable
          finishCompile();
       }
    };
-   
-   
-   //------------------------------------------------------------
-   // Program execution callbacks
-   //------------------------------------------------------------
-   public synchronized void programStarted() {
-      this.status = "Running";
-      Log.i(TAG, status);
-   }
-   
-   public synchronized void programStopped() {
-      this.status = "Done";
-   }
-   
-   public synchronized void programTrace(int cid) {
-      Log.i(TAG, "Code: " + cid);
-      if (this.program != null && cid >= 0) {
-         Statement s = program.getStatement(cid);
-         if (s != null) {
-            this.status = s.toString();
-         }
-      }
-   }
-   
-   public synchronized String getProgramStatus() {
-      return this.status;
-   }
 }
