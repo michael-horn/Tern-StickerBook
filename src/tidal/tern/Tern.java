@@ -33,7 +33,7 @@ import android.net.Uri;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -112,8 +112,8 @@ public class Tern extends Activity implements OnClickListener, Runnable {
          Log.e(TAG, cx.getMessage());
       }
 
-      //this.view = (ProgramView)findViewById(R.id.ProgramView);
-      //this.view.setTern(this);
+      this.view = (ProgramView)findViewById(R.id.ProgramView);
+      this.view.setTern(this);
    }
    
    
@@ -134,8 +134,10 @@ public class Tern extends Activity implements OnClickListener, Runnable {
          Log.i(TAG, String.valueOf(Uri.fromFile(temp)));
          startActivityForResult(intent, CAMERA_PIC_REQUEST);
          */
-         BitmapDrawable test = (BitmapDrawable)res.getDrawable(R.drawable.test);
-         Bitmap bitmap = test.getBitmap();
+         BitmapDrawable test = (BitmapDrawable)getResources().getDrawable(R.drawable.test);
+         this.bitmap = test.getBitmap();
+         this.view.setBitmap(bitmap);
+         startCompile();
          
       } catch (Exception x) {
          Log.e(TAG, "Save file error " + x);
@@ -181,10 +183,6 @@ public class Tern extends Activity implements OnClickListener, Runnable {
    protected void finishCompile() {
       this.pd.dismiss();
       this.compiling = false;
-      try {
-      } catch (Exception x) {
-         Log.e(TAG, "Error running program " + x);
-      }
    }
    
    
