@@ -78,7 +78,7 @@ public class StatementFactory {
                      else if ("plug".equals(xml.getName()) ||
                               "socket".equals(xml.getName()) ||
                               "param".equals(xml.getName())) {
-                        s.addConnector(newConnector(xml));
+                        s.addConnector(newConnector(s, xml));
                      }
                   }
                   break;
@@ -118,7 +118,7 @@ public class StatementFactory {
    }
    
    
-   private static Connector newConnector(XmlResourceParser xml) {
+   private static Connector newConnector(Statement s, XmlResourceParser xml) {
       int type = Connector.TYPE_IN;
       if ("socket".equals(xml.getName())) {
          type = Connector.TYPE_IN;
@@ -134,7 +134,7 @@ public class StatementFactory {
       String sdx = xml.getAttributeValue(null, "dx");
       String sdy = xml.getAttributeValue(null, "dy");
       
-      return new Connector(type, name, toFloat(sdx), toFloat(sdy));
+      return new Connector(s, type, name, toFloat(sdx), toFloat(sdy));
    }
    
    
