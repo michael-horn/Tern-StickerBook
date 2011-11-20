@@ -113,14 +113,19 @@ public class Statement {
  * Factory method. Creates a new statement of the correct type.
  */
    public Statement newInstance(TopCode top) {
-      Statement s = new Statement(top);
-      s.name = this.name;
-      s.text = this.text;
-      s.start = this.start;
-      for (Connector c : connectors) {
-         s.addConnector(c.clone(s));
+      try {
+         Statement s = this.getClass().newInstance();
+         s.top = top;
+         s.name = this.name;
+         s.text = this.text;
+         s.start = this.start;
+         for (Connector c : connectors) {
+            s.addConnector(c.clone(s));
+         }
+         return s;
+      } catch (Exception x) {
+         return null;
       }
-      return s;
    }
 
 
