@@ -45,14 +45,16 @@ import java.io.PrintWriter;
    protected int type;
    protected String name;
    protected float dx, dy;
+   protected Statement parent;
    protected Statement other;
    
    
-   public Connector(int type) {
-      this(type, "", 0, 0);
+   public Connector(Statement parent, int type) {
+      this(parent, type, "", 0, 0);
    }
    
-   public Connector(int type, String name, float dx, float dy) {
+   public Connector(Statement parent, int type, String name, float dx, float dy) {
+      this.parent = parent;
       this.type = type;
       this.name = name;
       this.dx = dx;
@@ -60,8 +62,8 @@ import java.io.PrintWriter;
       this.other = null;
    }
    
-   public Connector clone() {
-      return new Connector(this.type, this.name, this.dx, this.dy);
+   public Connector clone(Statement parent) {
+      return new Connector(parent, this.type, this.name, this.dx, this.dy);
    }
    
    public String getName() {
@@ -109,18 +111,27 @@ import java.io.PrintWriter;
       this.dy = dy;
    }
    
-   public float getTargetX(TopCode top) {
+   public float getTargetX() {
+      TopCode top = this.parent.getTopCode();
       float d = top.getDiameter();
       float o = top.getOrientation();
       float x = top.getCenterX();
       return (float)(x + dx * d * Math.cos(o) - dy * d * Math.sin(o));
    }
    
-   public float getTargetY(TopCode top) {
+   public float getTargetY() {
+      TopCode top = this.parent.getTopCode();
       float d = top.getDiameter();
       float o = top.getOrientation();
       float y = top.getCenterY();
       return (float)(y + dx * d * Math.sin(o) + dy * d * Math.cos(o));
+   }
+   
+   public boolean overlaps(Connector other) {
+      float tx = (other.getTargetX() - getTargetX());
+      float ty = (other.getTargetY() - getTargetY());
+      float r = this.parent.getTopCode().getDiameter() * 0.8f;
+      return ((tx * tx + ty * ty) <= (r * r));
    }
    
    public Statement getConnection() {
