@@ -112,7 +112,7 @@ public class ConnectionMap {
             s = (TSocket)sockets.get(i);
             if (!c.attached && s.isConnectedTo(c)) {
                c.attached = true;
-               c.statement.connect(s.statement, c.name);
+               //c.statement.connect(s.statement, c.name);
                break;
             }
          }
