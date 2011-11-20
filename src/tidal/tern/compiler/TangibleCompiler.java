@@ -28,6 +28,7 @@ package tidal.tern.compiler;
 import java.util.List;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import android.util.Log;
 import android.graphics.Bitmap;
 import topcodes.*;
 
@@ -38,10 +39,9 @@ import topcodes.*;
  * @author Michael Horn
  */
 public class TangibleCompiler {
-
-   /** Connection map for building control chains from a list of topcodes */
-   protected ConnectionMap map;
    
+   public static final String TAG = "TangibleCompiler";
+
    /** Scans image bitmap files for topcodes */
    protected Scanner scanner;
    
@@ -50,7 +50,6 @@ public class TangibleCompiler {
    
    
    public TangibleCompiler() {
-      this.map        = new ConnectionMap();
       this.scanner    = new Scanner();
       this.tcompiler  = new TextCompiler();
    }
@@ -60,8 +59,8 @@ public class TangibleCompiler {
  * Tangible compile function: generate a program from a bitmap image
  */
    public Program compile(Bitmap image) throws CompileException {
+      
       Program program = new Program();
-      this.map.clear();
 
       
       //-----------------------------------------------------------
@@ -76,15 +75,22 @@ public class TangibleCompiler {
       for (TopCode top : spots) {
          Statement s = StatementFactory.createStatement(top);
          if (s != null) {
+            Log.i(TAG, "Found: " + s.getName());
             program.addStatement(s);
-            s.registerConnections(map);
          }
       }
+
 
       //-----------------------------------------------------------
       // 3. Connect chains of statements together
       //-----------------------------------------------------------
-      map.formConnections();
+      for (Statement a : program.getStatements()) {
+         for (Statement b : program.getStatements()) {
+            if (a != b) {
+               a.connect(b);
+            }
+         }
+      }
       
       
       //-----------------------------------------------------------
@@ -94,11 +100,12 @@ public class TangibleCompiler {
       PrintWriter out = new PrintWriter(sw);
 
       for (Statement s : program.getStatements()) {
-         if (s instanceof StartStatement) {
+         if (s.isStartStatement()) {
             s.compile(out);
          }
       }
       String tcode = sw.toString();
+      Log.i(TAG, tcode);
       program.setTextCode(tcode);
 
       
@@ -106,10 +113,9 @@ public class TangibleCompiler {
       // 5. Convert the text-based code to assembly code
       //-----------------------------------------------------------
       String pcode = tcompiler.compile(tcode);
+      Log.i(TAG, pcode);
       program.setAssemblyCode(pcode);
-
 
       return program;
    }
 }
-
