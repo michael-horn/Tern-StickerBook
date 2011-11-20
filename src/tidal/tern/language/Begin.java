@@ -39,7 +39,7 @@ public class Begin extends Statement {
 
 
    public void compile(PrintWriter out) throws CompileException {
-      out.println("process main");
+      out.println("process main:");
       out.println("{");
       compileNext(out);
       out.println("}");      
