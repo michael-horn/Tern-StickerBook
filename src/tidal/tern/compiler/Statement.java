@@ -118,7 +118,7 @@ public class Statement {
       s.text = this.text;
       s.start = this.start;
       for (Connector c : connectors) {
-         s.addConnector(c.clone());
+         s.addConnector(c.clone(s));
       }
       return s;
    }
@@ -181,6 +181,22 @@ public class Statement {
 
    public int getCompileID() {
       return this.c_id;
+   }
+   
+   
+   public void connect(Statement other) {
+      for (Connector plug : connectors) {
+         if (plug.isOutgoing()) {
+            for (Connector socket : other.connectors) {
+               if (socket.isIncoming()) {
+                  if (socket.overlaps(plug)) {
+                     plug.setConnection(other);
+                     socket.setConnection(other);
+                  }
+               }
+            }
+         }
+      }
    }
 }   
 
