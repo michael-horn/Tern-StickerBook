@@ -29,13 +29,14 @@ import java.util.List;
 import java.lang.reflect.Method;
 import java.io.Reader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.BufferedReader;
 
 
 public class Interpreter implements Runnable {
    
    /** Robot controlled by this interpreter */
-   protected Robot robot;
+   protected Object robot;
 
    /** Assembly instructions */
    protected List<String> code;
@@ -59,9 +60,8 @@ public class Interpreter implements Runnable {
    protected boolean running;
 
 
-   
-   public Interpreter(Robot robot) {
-      this.robot     = robot;
+   public Interpreter() {
+      this.robot     = null;
       this.code      = new java.util.ArrayList<String>();
       this.processes = new java.util.ArrayList<Process>();
       this.vars      = new java.util.ArrayList<Integer>();
@@ -69,7 +69,6 @@ public class Interpreter implements Runnable {
       this.debuggers = new java.util.ArrayList<Debugger>();
       this.stop      = false;
       this.running   = false;
-      if (robot != null) addDebugger(robot);
    }
 
 
@@ -105,6 +104,20 @@ public class Interpreter implements Runnable {
       this.labels.clear();
    }
 
+   
+   public void load(Reader pcode) throws IOException {
+      BufferedReader in = new BufferedReader(pcode);
+      String line;
+      while ((line = in.readLine()) != null) {
+         loadLine(line);
+      }
+   }
+   
+   
+   public void load(String pcode) throws IOException {
+      load(new StringReader(pcode));
+   }
+
 
 /**
  * Returns true if the interpreter is running
@@ -116,6 +129,16 @@ public class Interpreter implements Runnable {
 
    public void addDebugger(Debugger d) {
       this.debuggers.add(d);
+   }
+   
+   
+   public Object getRobot() {
+      return this.robot;
+   }
+   
+   
+   public void setRobot(Object robot) {
+      this.robot = robot;
    }
 
    
@@ -251,15 +274,6 @@ public class Interpreter implements Runnable {
    }
    
    
-   public void load(Reader pcode) throws IOException {
-      BufferedReader in = new BufferedReader(pcode);
-      String line;
-      while ((line = in.readLine()) != null) {
-         loadLine(line);
-      }
-   }
-
-
    private void loadLine(String line) {
       if (isRunning()) return;
       if (line == null || line.length() == 0) return;

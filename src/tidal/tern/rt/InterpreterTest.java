@@ -15,7 +15,10 @@ public class InterpreterTest extends TestCase {
    protected Interpreter in;
    
    protected void setUp() {
-      this.in = new Interpreter(new TestRobot());
+      TestRobot r = new TestRobot();
+      this.in = new Interpreter();
+      this.in.setRobot(r);
+      this.in.addDebugger(r);
    }
    
    protected void runTest(String filename) throws Exception {
@@ -42,7 +45,7 @@ public class InterpreterTest extends TestCase {
    
    
    
-   public class TestRobot extends Robot {
+   public class TestRobot implements Debugger {
       
       public void processStarted(Process p) {
          System.out.println("starting " + p.getName());   
