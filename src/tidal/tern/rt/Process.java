@@ -407,7 +407,11 @@ public class Process {
 
    
    protected void LOAD_ADDRESS(String arg) {
-      push(in.getLineNumber(arg));
+      int addr = in.getLineNumber(arg);
+      push(addr);
+      if (addr < 0) {
+         ERROR("Invalid Address: " + arg);
+      }
    }
 
 
