@@ -28,7 +28,6 @@ package tidal.tern.compiler;
 import java.util.List;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import android.util.Log;
 import android.graphics.Bitmap;
 import topcodes.*;
 
@@ -40,7 +39,6 @@ import topcodes.*;
  */
 public class TangibleCompiler {
    
-   public static final String TAG = "TangibleCompiler";
 
    /** Scans image bitmap files for topcodes */
    protected Scanner scanner;
@@ -48,10 +46,19 @@ public class TangibleCompiler {
    /** Converts high-level text-based code to assembly code */
    protected TextCompiler tcompiler;
    
+   /** Header include for generated text-based code */
+   protected String header;
+   
    
    public TangibleCompiler() {
       this.scanner    = new Scanner();
       this.tcompiler  = new TextCompiler();
+      this.header     = "";
+   }
+   
+   
+   public void setHeader(String header) {
+      this.header = header;
    }
 
 
@@ -75,7 +82,6 @@ public class TangibleCompiler {
       for (TopCode top : spots) {
          Statement s = StatementFactory.createStatement(top);
          if (s != null) {
-            Log.i(TAG, "Found: " + s.getName());
             program.addStatement(s);
          }
       }
@@ -104,8 +110,7 @@ public class TangibleCompiler {
             s.compile(out);
          }
       }
-      String tcode = sw.toString();
-      Log.i(TAG, tcode);
+      String tcode = header + "\n" + sw.toString();
       program.setTextCode(tcode);
 
       
@@ -113,7 +118,6 @@ public class TangibleCompiler {
       // 5. Convert the text-based code to assembly code
       //-----------------------------------------------------------
       String pcode = tcompiler.compile(tcode);
-      Log.i(TAG, pcode);
       program.setAssemblyCode(pcode);
 
       return program;
