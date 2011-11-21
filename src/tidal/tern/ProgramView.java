@@ -26,14 +26,19 @@ import android.view.View;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Bitmap;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.MotionEvent;
 import android.util.AttributeSet;
+import android.os.Handler;
+import android.os.Message;
+
 
 
 public class ProgramView extends View {
@@ -51,6 +56,22 @@ public class ProgramView extends View {
    public ProgramView(Context context, AttributeSet attribs) {
       super(context, attribs);
    }
+   
+   
+/**
+ * Thread-safe invalidate function
+ */
+   public void repaint() {
+      repaintHandler.sendEmptyMessage(0);
+   }
+   
+   
+   private Handler repaintHandler = new Handler() {
+      @Override
+      public void handleMessage(Message msg) {
+         invalidate();
+      }
+   };
    
    
    public void setTern(Tern tern) {
@@ -113,15 +134,20 @@ public class ProgramView extends View {
       
       //canvas.drawCircle(50, 50, 15, paint);
 
-      // draw bitmap      
+      // draw bitmap
       if (this.bitmap != null) {
-         dw = bitmap.getWidth();
-         dh = bitmap.getHeight();
-         ds = 1.4f * w / dw;
-         dw *= ds;
-         dh *= ds;
-         RectF bounds = new RectF(w/2 - dw/2, h/2 - dh/2, w/2 + dw/2, h/2 + dh/2);
-         canvas.drawBitmap(bitmap, null, bounds, null);
+         if (tern.getProgram() != null) {
+            Matrix m = focus(tern.getProgram().getBounds());
+            canvas.drawBitmap(bitmap, m, null);
+         } else {
+            dw = bitmap.getWidth();
+            dh = bitmap.getHeight();
+            ds = 1.4f * w / dw;
+            dw *= ds;
+            dh *= ds;
+            RectF dest = new RectF(w/2 - dw/2, h/2 - dh/2, w/2 + dw/2, h/2 + dh/2);
+            canvas.drawBitmap(bitmap, null, dest, null);
+         }
       }
       
       // draw button
@@ -138,6 +164,49 @@ public class ProgramView extends View {
       font.setStyle(Style.FILL);
       font.setTextSize(40);
       font.setTextAlign(Paint.Align.CENTER);
-      //canvas.drawText(tern.getProgramStatus(), 15, h/2, font);
+      canvas.drawText(msg, w/2, h/2, font);
    }
+   
+   
+   private String msg = "";
+   public void setMessage(String msg) {
+      this.msg = msg;
+   }
+   
+   
+	public Matrix focus(RectF bounds) {
+		float pw = bounds.width();
+		float ph = bounds.height();
+		float px = bounds.left;
+		float py = bounds.top;
+		float par = (pw / ph);
+		
+		float sw = getWidth();
+		float sh = getHeight();
+		float sar = (sw / sh);
+		
+		float cx = sw / 2;
+		float cy = sh / 2;
+		float pcx = (bounds.left + bounds.right) / 2;
+		float pcy = ph / 2 + py;
+      
+      Matrix m = new Matrix();
+
+		float z = 1;
+		
+		if (par > sar) {
+			z = sw / pw;
+		} else {
+			z = sh / ph;
+		}
+		
+		// Limit zoom in factor so we don't get too close
+		if (z > 1.5f) z = 1.5f;
+      z *= 0.95f;
+      
+      m.preScale(z, z);
+      m.preTranslate(cx-pcx, cy-pcy);
+      return m;
+	}
+   
 }

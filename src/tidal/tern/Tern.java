@@ -25,6 +25,8 @@
 package tidal.tern;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -54,14 +56,20 @@ import android.os.Environment;
 
 import topcodes.*;
 import tidal.tern.compiler.*;
+import tidal.tern.rt.Interpreter;
+import tidal.tern.rt.Debugger;
+import tidal.tern.rt.Process;
 
 
 
-public class Tern extends Activity implements OnClickListener, Runnable {
+public class Tern extends Activity implements OnClickListener, Runnable, Debugger {
    
    public static final String TAG = "TernMob";
    
    public static final int CAMERA_PIC_REQUEST = 2500;
+   
+   public static final int COMPILE_SUCCESS = 100;
+   public static final int COMPILE_FAILURE = 101;
    
    
    protected ProgramView view;
@@ -70,6 +78,8 @@ public class Tern extends Activity implements OnClickListener, Runnable {
             Environment.DIRECTORY_PICTURES);
    protected File temp = new File(path, "capture.jpg");
 
+   /** Used to run tern programs */
+   protected Interpreter interp = new Interpreter();
    
    /** Used to compile bitmap images into programs */
    protected TangibleCompiler compiler = new TangibleCompiler();
@@ -112,8 +122,11 @@ public class Tern extends Activity implements OnClickListener, Runnable {
          Log.e(TAG, cx.getMessage());
       }
 
+      this.compiler.setHeader(loadDriverFile());
+
       this.view = (ProgramView)findViewById(R.id.ProgramView);
       this.view.setTern(this);
+      this.interp.addDebugger(this);
    }
    
    
@@ -128,16 +141,16 @@ public class Tern extends Activity implements OnClickListener, Runnable {
    public void onClick(View view) {
       if (compiling) return;
       try {
-         /*
          Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
          intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
          Log.i(TAG, String.valueOf(Uri.fromFile(temp)));
          startActivityForResult(intent, CAMERA_PIC_REQUEST);
-         */
+         /*
          BitmapDrawable test = (BitmapDrawable)getResources().getDrawable(R.drawable.test);
          this.bitmap = test.getBitmap();
          this.view.setBitmap(bitmap);
          startCompile();
+         */
          
       } catch (Exception x) {
          Log.e(TAG, "Save file error " + x);
@@ -173,6 +186,10 @@ public class Tern extends Activity implements OnClickListener, Runnable {
    }
    
    
+   public Program getProgram() {
+      return this.program;
+   }
+   
    protected void startCompile() {
       this.compiling = true;      
       this.pd = ProgressDialog.show(this, "Tern", "Compiling Program...", true, false);
@@ -180,9 +197,23 @@ public class Tern extends Activity implements OnClickListener, Runnable {
    }
    
    
-   protected void finishCompile() {
+   protected void finishCompile(boolean success) {
       this.pd.dismiss();
       this.compiling = false;
+      this.view.invalidate();
+      
+      if (!success) return;
+      
+      Log.i(TAG, "Compile Finished");
+      Log.i(TAG, program.getTextCode());
+      Log.i(TAG, program.getAssemblyCode());
+      try {
+         this.interp.clear();
+         this.interp.load(program.getAssemblyCode());
+         this.interp.start();
+      } catch (Exception x) {
+         Log.e(TAG, "Interpreter error", x);
+      }
    }
    
    
@@ -190,12 +221,13 @@ public class Tern extends Activity implements OnClickListener, Runnable {
       try {
          Log.i(TAG, "Running...");
          this.program = compiler.compile(this.bitmap);
-
-         handler.sendEmptyMessage(0);
+         handler.sendEmptyMessage(COMPILE_SUCCESS);
       }
       catch (CompileException cx) {
          Log.e(TAG, cx.getMessage());
-         handler.sendEmptyMessage(1);
+         
+         // TODO Signal the error to the user
+         handler.sendEmptyMessage(COMPILE_FAILURE);
       }
    }
    
@@ -203,7 +235,48 @@ public class Tern extends Activity implements OnClickListener, Runnable {
    private Handler handler = new Handler() {
       @Override
       public void handleMessage(Message msg) {
-         finishCompile();
+         finishCompile(msg.what == COMPILE_SUCCESS);
       }
    };
+   
+   
+   private String loadDriverFile() {
+      String result = "";
+      try {
+         BufferedReader in = new BufferedReader(
+            new InputStreamReader(
+               getResources().openRawResource(R.raw.driver)));
+         String line;
+         while ((line = in.readLine()) != null) {
+            result += line + "\n";
+         }
+      } catch (IOException iox) {
+         Log.e(TAG, "Error reading header file", iox);
+      }
+      return result;
+   }
+   
+   
+   public void processStarted(Process p) {
+      Log.i(TAG, "Process started");
+   }
+   
+   public void processStopped(Process p) {
+      Log.i(TAG, "Process stopped");
+      this.view.setMessage("DONE!");
+      this.view.repaint();
+   }
+   
+   public void trace(Process p, String message) {
+      Log.i(TAG, "Trace: " + message);
+      this.view.setMessage(message.toUpperCase());
+      this.view.repaint();
+   }
+   
+   public void print(Process p, String message) { }
+   
+   public void error(Process p, String message) {
+      Log.i(TAG, "Error: " + message);
+   }
+   
 }
