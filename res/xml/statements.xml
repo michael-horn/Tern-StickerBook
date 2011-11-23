@@ -49,8 +49,8 @@
    
 
    
-   <!-- SHAKE -->
-   <statement code="557" name="Shake">
+   <!-- WIGGLE -->
+   <statement code="557" name="Wiggle">
       <socket name="prev" />
       <plug dx="3" dy="0" name="next" />
       <code>
@@ -103,6 +103,62 @@
       <plug dx="3" dy="0" name="next" />
       <code>
          spin()
+         wait 1000
+      </code>
+   </statement>
+
+
+              
+   <!-- DANCE (star skill) -->
+   <statement code="279" name="Dance">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         dance()
+         wait 1000
+      </code>
+   </statement>
+
+
+              
+   <!-- TAP SENSOR (push down) -->
+   <statement code="419" name="Tap Sensor">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         wait 1000
+      </code>
+   </statement>
+
+
+              
+   <!-- BEGIN REPEAT -->
+   <statement code="171" name="Begin Repeat">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         wait 1000
+      </code>
+   </statement>
+
+
+              
+   <!-- END REPEAT -->
+   <statement code="179" name="End Repeat">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         wait 1000
+      </code>
+   </statement>
+
+
+              
+   <!-- WAIT FOR -->
+   <statement code="611" name="Wait For">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
          wait 1000
       </code>
    </statement>
