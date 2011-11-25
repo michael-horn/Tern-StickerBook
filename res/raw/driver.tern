@@ -1,15 +1,15 @@
-import jump()
+import doJump()
 
-import run()
+import doRun()
 
-import walk()
+import doWalk()
 
-import shake()
+import doWiggle()
 
-import sleep()
+import doSleep()
 
-import sit()
+import doSit()
 
-import stand()
+import doStand()
 
-import spin()
+import doSpin()
