@@ -35,6 +35,7 @@ import android.graphics.drawable.Drawable;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.MotionEvent;
+import android.util.Log;
 import android.util.AttributeSet;
 import android.os.Handler;
 import android.os.Message;
@@ -158,19 +159,41 @@ public class ProgramView extends View {
       button.setBounds(dx, dy, dx + dw, dy + dh);
       button.draw(canvas);
       
-      // draw program status
+      // draw robot picture
+      if (picture > 0) {
+         Drawable d = res.getDrawable(picture);
+         if (d != null) {
+            Log.i("ProgramView", "drawing picture");
+            dw = d.getIntrinsicWidth() / 3;
+            dh = d.getIntrinsicHeight() / 3;
+            dx = w/2 - dw/2;
+            dy = h/2 - dh/2;
+            d.setBounds(dx, dy, dx + dw, dy + dh);
+            d.draw(canvas);
+         }
+      }
+      
+      /*
       Paint font = new Paint(Paint.ANTI_ALIAS_FLAG);
       font.setColor(Color.WHITE);
       font.setStyle(Style.FILL);
       font.setTextSize(40);
       font.setTextAlign(Paint.Align.CENTER);
       canvas.drawText(msg, w/2, h/2, font);
+      */
    }
    
    
    private String msg = "";
    public void setMessage(String msg) {
       this.msg = msg;
+   }
+   
+   private int picture = -1;
+   public void setPicture(int id) {
+      Resources res = getResources();
+      this.picture = id;
+      Log.i("ProgramView", "picture set to " + picture);
    }
    
    
