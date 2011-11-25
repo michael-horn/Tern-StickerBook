@@ -3,7 +3,7 @@
    
    <!-- BEGIN -->
    <statement code="569" name="Begin" start="true" class="tidal.tern.language.Begin">
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="1.83" dy="0" name="next" />
    </statement>
    
    
@@ -17,10 +17,10 @@
    <!-- JUMP (growl) -->
    <statement code="307" name="Jump">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         jump()
-         wait 1000
+         doJump()
+         wait 2000
       </code>
    </statement>
    
@@ -28,10 +28,10 @@
    <!-- RUN (backward) -->
    <statement code="185" name="Run">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         run()
-         wait 1000
+         doRun()
+         wait 2000
       </code>
    </statement>
    
@@ -40,10 +40,10 @@
    <!-- WALK (forward) -->
    <statement code="405" name="Walk">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         walk()
-         wait 1000
+         doWalk()
+         wait 2000
       </code>
    </statement>
    
@@ -52,10 +52,10 @@
    <!-- WIGGLE -->
    <statement code="557" name="Wiggle">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         shake()
-         wait 1000
+         doWiggle()
+         wait 2000
       </code>
    </statement>
    
@@ -64,10 +64,10 @@
    <!-- SLEEP (beep) -->
    <statement code="661" name="Sleep">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         sleep()
-         wait 1000
+         doSleep()
+         wait 2000
       </code>
    </statement>
    
@@ -76,10 +76,10 @@
    <!-- SIT (song) -->
    <statement code="397" name="Sit">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         sit()
-         wait 1000
+         doSit()
+         wait 2000
       </code>
    </statement>
    
@@ -88,10 +88,10 @@
    <!-- STAND (left) -->
    <statement code="1189" name="Stand">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         stand()
-         wait 1000
+         doStand()
+         wait 2000
       </code>
    </statement>
    
@@ -100,10 +100,10 @@
    <!-- SPIN (spin) -->
    <statement code="331" name="Spin">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         spin()
-         wait 1000
+         doSpin()
+         wait 2000
       </code>
    </statement>
 
@@ -112,10 +112,10 @@
    <!-- DANCE (star skill) -->
    <statement code="279" name="Dance">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="3.4" dy="0" name="next" />
       <code>
-         dance()
-         wait 1000
+         doDance()
+         wait 2000
       </code>
    </statement>
 
@@ -134,10 +134,11 @@
               
    <!-- BEGIN REPEAT -->
    <statement code="171" name="Begin Repeat">
-      <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <socket dx="-0.1" dy="1.42" name="prev" />
+      <plug dx="1.5" dy="1.42" name="next" />
       <code>
-         wait 1000
+         while true:
+         {
       </code>
    </statement>
 
@@ -145,10 +146,11 @@
               
    <!-- END REPEAT -->
    <statement code="179" name="End Repeat">
-      <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <socket dx="0" dy="1.42" name="prev" />
+      <plug dx="1.5" dy="1.42" name="next" />
       <code>
-         wait 1000
+            wait 100
+         }
       </code>
    </statement>
 
@@ -157,7 +159,7 @@
    <!-- WAIT FOR -->
    <statement code="611" name="Wait For">
       <socket name="prev" />
-      <plug dx="3" dy="0" name="next" />
+      <plug dx="4.5" dy="0" name="next" />
       <code>
          wait 1000
       </code>
