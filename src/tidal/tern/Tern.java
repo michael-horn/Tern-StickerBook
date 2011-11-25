@@ -99,6 +99,9 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
    /** Program execution status */
    protected String status = "";
    
+   /** Robot that "executes" the interpreter commands */
+   protected Roberto roberto;
+   
 
    //----------------------------------------------------------------   
    // onCreate
@@ -122,11 +125,15 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
          Log.e(TAG, cx.getMessage());
       }
 
+
       this.compiler.setHeader(loadDriverFile());
 
       this.view = (ProgramView)findViewById(R.id.ProgramView);
       this.view.setTern(this);
+      this.roberto = new Roberto(getResources(), view);
       this.interp.addDebugger(this);
+      this.interp.addDebugger(roberto);
+      this.interp.setRobot(roberto);
    }
    
    
@@ -172,7 +179,6 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
                      this.bitmap = null;
                   }
                   this.bitmap = Media.getBitmap(getContentResolver(), Uri.fromFile(temp) );
-                  view.setBitmap(bitmap);
                   startCompile();
                   
                } catch (FileNotFoundException e) {
@@ -198,6 +204,10 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
    
    
    protected void finishCompile(boolean success) {
+      if (this.bitmap != null) {
+         this.bitmap.recycle();
+         this.bitmap = null;
+      }
       this.pd.dismiss();
       this.compiling = false;
       this.view.invalidate();
