@@ -28,6 +28,7 @@ package tidal.tern.compiler;
 import java.util.List;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import android.util.Log;
 import android.graphics.Bitmap;
 import topcodes.*;
 
@@ -83,6 +84,7 @@ public class TangibleCompiler {
          Statement s = StatementFactory.createStatement(top);
          if (s != null) {
             program.addStatement(s);
+            Log.i("TangibleCompiler", "Found: " + s);
          }
       }
 
