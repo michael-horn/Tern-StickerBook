@@ -39,6 +39,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 
 import android.widget.Button;
 import android.widget.ImageView;
@@ -57,12 +58,11 @@ import android.os.Environment;
 import topcodes.*;
 import tidal.tern.compiler.*;
 import tidal.tern.rt.Interpreter;
-import tidal.tern.rt.Debugger;
 import tidal.tern.rt.Process;
 
 
 
-public class Tern extends Activity implements OnClickListener, Runnable, Debugger {
+public class Tern extends Activity implements OnClickListener, Runnable {
    
    public static final String TAG = "TernMob";
    
@@ -72,11 +72,10 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
    public static final int COMPILE_FAILURE = 101;
    
    
-   protected ProgramView view;
-   
    protected File path = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES);
    protected File temp = new File(path, "capture.jpg");
+
 
    /** Used to run tern programs */
    protected Interpreter interp = new Interpreter();
@@ -103,35 +102,33 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
    protected Roberto roberto;
    
 
-   //----------------------------------------------------------------   
-   // onCreate
-   //----------------------------------------------------------------   
+//----------------------------------------------------------------   
+// onCreate
+//----------------------------------------------------------------   
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       
       // Hide the window title
       requestWindowFeature(Window.FEATURE_NO_TITLE);
-      //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
       
+      // Set layout 
       setContentView(R.layout.main);
-      
+
+      // Load TERN statement definitions       
       try {
-         Log.i(TAG, "Loading statements");
          XmlResourceParser xml = getResources().getXml(R.xml.statements);
-         Log.i(TAG, "got resource file");
          StatementFactory.loadStatements(xml);
-         Log.i(TAG, "loaded");
       } catch (CompileException cx) {
          Log.e(TAG, cx.getMessage());
       }
 
-
+      // Load driver header file
       this.compiler.setHeader(loadDriverFile());
 
-      this.view = (ProgramView)findViewById(R.id.ProgramView);
-      this.view.setTern(this);
-      this.roberto = new Roberto(getResources(), view);
-      this.interp.addDebugger(this);
+      // Get the robot and link it to the interpreter
+      this.roberto = (Roberto)findViewById(R.id.Roberto);
+      this.roberto.setTern(this);
       this.interp.addDebugger(roberto);
       this.interp.setRobot(roberto);
    }
@@ -142,15 +139,14 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
    }
     
     
-   //----------------------------------------------------------------
-   // onClick -- Called by the compile/camera button
-   //----------------------------------------------------------------   
+//----------------------------------------------------------------
+// onClick -- Called by the compile/camera button
+//----------------------------------------------------------------   
    public void onClick(View view) {
       if (compiling) return;
       try {
          Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
          intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
-         Log.i(TAG, String.valueOf(Uri.fromFile(temp)));
          startActivityForResult(intent, CAMERA_PIC_REQUEST);
          /*
          BitmapDrawable test = (BitmapDrawable)getResources().getDrawable(R.drawable.test);
@@ -158,16 +154,15 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
          this.view.setBitmap(bitmap);
          startCompile();
          */
-         
       } catch (Exception x) {
          Log.e(TAG, "Save file error " + x);
       }
    }
    
    
-   //----------------------------------------------------------------
-   // onActivityResult -- Called by the ImageCapture intent
-   //----------------------------------------------------------------
+//----------------------------------------------------------------
+// onActivityResult -- Called by the ImageCapture intent
+//----------------------------------------------------------------
    protected void onActivityResult(int request, int result, Intent data) {
       switch (request) {
          
@@ -180,7 +175,6 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
                   }
                   this.bitmap = Media.getBitmap(getContentResolver(), Uri.fromFile(temp) );
                   startCompile();
-                  
                } catch (FileNotFoundException e) {
                   Log.e(TAG, "File not found " + e);
                } catch (IOException e) {
@@ -210,7 +204,7 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
       }
       this.pd.dismiss();
       this.compiling = false;
-      this.view.invalidate();
+      this.roberto.invalidate();
       
       if (!success) return;
       
@@ -229,14 +223,11 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
    
    public void run() {
       try {
-         Log.i(TAG, "Running...");
          this.program = compiler.compile(this.bitmap);
          handler.sendEmptyMessage(COMPILE_SUCCESS);
       }
       catch (CompileException cx) {
          Log.e(TAG, cx.getMessage());
-         
-         // TODO Signal the error to the user
          handler.sendEmptyMessage(COMPILE_FAILURE);
       }
    }
@@ -265,28 +256,4 @@ public class Tern extends Activity implements OnClickListener, Runnable, Debugge
       }
       return result;
    }
-   
-   
-   public void processStarted(Process p) {
-      Log.i(TAG, "Process started");
-   }
-   
-   public void processStopped(Process p) {
-      Log.i(TAG, "Process stopped");
-      this.view.setMessage("DONE!");
-      this.view.repaint();
-   }
-   
-   public void trace(Process p, String message) {
-      Log.i(TAG, "Trace: " + message);
-      this.view.setMessage(message.toUpperCase());
-      this.view.repaint();
-   }
-   
-   public void print(Process p, String message) { }
-   
-   public void error(Process p, String message) {
-      Log.i(TAG, "Error: " + message);
-   }
-   
 }
