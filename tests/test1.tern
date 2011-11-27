@@ -1,16 +1,22 @@
 5 + 5
 -----------------
+$PARSE ERROR 
+=================
+print 5 + 5
+-----------------
 push 5
 push 5
 +
+print
 =================
-4 - 4
+print 4 - 4
 -----------------
 push 4
 push 4
 -
+print
 =================
-8 + (7 - (6 + 5))
+print 8 + (7 - (6 + 5))
 -----------------
 push 8
 push 7
@@ -19,8 +25,9 @@ push 5
 +
 -
 +
+print
 =================
-((8 + 7) - 6) + 5
+print ((8 + 7) - 6) + 5
 -----------------
 push 8
 push 7
@@ -29,28 +36,30 @@ push 6
 -
 push 5
 +
+print
 =================
-3 * 2 + 4
+print 3 * 2 + 4
 -----------------
 $PARSE ERROR
 =================
--8.33 + 2.5
+print -8.33 + 2.5
 -----------------
 push -8.33
 push 2.5
 +
+print
 =================
-5 + 4 - 3 + 2
+print 5 + 4 - 3 + 2
 -----------------
 $PARSE ERROR
 =================
-a + b
+print a + b
 -----------------
 $PARSE ERROR - Unbound variable
 =================
 a = 10
 b = 20
-a + b
+print a + b
 -----------------
 push 10
 push 0
@@ -63,14 +72,15 @@ load-global
 push 1
 load-global
 +
+print
 =================
-about - below
+print about - below
 -----------------
 $PARSE ERROR - Unbound variable
 =================
 about = 44
 below = 2.5
-about - below
+print about - below
 -----------------
 push 44
 push 0
@@ -83,4 +93,5 @@ load-global
 push 1
 load-global
 -
+print
 =================

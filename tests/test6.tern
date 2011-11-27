@@ -106,3 +106,35 @@ store-global
 load-address :while0
 goto
 :done0
+=================
+import getTouchSensor()
+while not getTouchSensor():
+{
+   wait 100
+}
+-----------------
+function getTouchSensor
+push 0
+frame
+push 0
+remote getTouchSensor
+return
+:while0
+trace getTouchSensor
+load-address getTouchSensor
+call
+not
+load-address :done0
+if-false
+push 100
+timer
+:sleep1
+yield
+load-address :done1
+if-timer
+load-address :sleep1
+goto
+:done1
+load-address :while0
+goto
+:done0

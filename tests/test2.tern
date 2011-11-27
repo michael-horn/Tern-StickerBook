@@ -1,28 +1,35 @@
-true and false
+print true and false
 -----------------
 push 1
 push 0
 and
+print
 =================
-false or true
+true and false
+-----------------
+$PARSE ERROR - expression can't stand alone
+=================
+print false or true
 -----------------
 push 0
 push 1
 or
+print
 =================
-not true
+print not true
 -----------------
 push 1
 not
+print
 =================
-(a or b) and c
+print (a or b) and c
 -----------------
 $PARSE ERROR - Unbound variable
 =================
 a = true
 b = false
 c = true
-(a or b) and c
+print (a or b) and c
 -----------------
 push 1
 push 0
@@ -41,8 +48,9 @@ or
 push 2
 load-global
 and
+print
 =================
-not ((true and false) or true)
+print not ((true and false) or true)
 -----------------
 push 1
 push 0
@@ -50,16 +58,18 @@ and
 push 1
 or
 not
+print
 =================
-(3 + 1) >= 4
+print (3 + 1) >= 4
 -----------------
 push 3
 push 1
 +
 push 4
 >=
+print
 =================
-(3 + 1) < (2 * 2)
+print (3 + 1) < (2 * 2)
 -----------------
 push 3
 push 1
@@ -68,7 +78,9 @@ push 2
 push 2
 *
 <
+print
 =================
-3 + 1 != 4
+print 3 + 1 != 4
 -----------------
 $PARSE ERROR
+=================
