@@ -53,47 +53,56 @@ public class Roberto implements Debugger {
    }
    
    
-   public void doJump(int [] args) {
+   public int doJump(int [] args) {
       changePicture(R.drawable.r_jump);
+      return 0;
    }
    
    
-   public void doRun(int [] args) {
+   public int doRun(int [] args) {
       changePicture(R.drawable.r_run);
+      return 0;
    }
    
    
-   public void doWalk(int [] args) {
+   public int doWalk(int [] args) {
       changePicture(R.drawable.r_walk);
+      return 0;
    }
    
    
-   public void doWiggle(int [] args) {
+   public int doWiggle(int [] args) {
       changePicture(R.drawable.r_wiggle);
+      return 0;
    }
    
    
-   public void doSleep(int [] args) {
+   public int doSleep(int [] args) {
       changePicture(R.drawable.r_sleep);
+      return 0;
    }
    
    
-   public void doSit(int [] args) {
+   public int doSit(int [] args) {
       changePicture(R.drawable.r_sit);
+      return 0;
    }
    
    
-   public void doStand(int [] args) {
+   public int doStand(int [] args) {
       changePicture(R.drawable.r_stand);
+      return 0;
    }
    
    
-   public void doSpin(int [] args) {
+   public int doSpin(int [] args) {
       changePicture(R.drawable.r_spin);
+      return 0;
    }
    
    
-   public void doDance(int [] args) {
+   public int doDance(int [] args) {
+      return 0;
    }
    
    
