@@ -78,7 +78,7 @@
       <socket name="prev" />
       <plug dx="3.4" dy="0" name="next" />
       <code>
-         doSit()
+         doYawn()
          wait 2000
       </code>
    </statement>
