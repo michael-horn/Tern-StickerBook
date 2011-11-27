@@ -143,64 +143,61 @@ public class Interpreter implements Runnable {
 
    
 /**
- * Called by a process or the interpreter to start/restart a process
+ * Called by a process or the interpreter to start/restart
+ * all processes with the matching name
  */
    protected void startProcess(String pname) {
-      Process p = getProcess(pname);
-      if (p != null) {
-         p.restart();
-         notifyProcessStarted(p);
-      }
-   }
-   
-
-/**
- * Called by a process or the interpreter to stop a process
- */
-   protected void stopProcess(String pname) {
-      Process p = getProcess(pname);
-      if (p != null) {
-         p.stop();
-         notifyProcessStopped(p);
-      }
-   }
-   
-   
-/**
- * Gets a Process by name or null if there is no match
- */
-   public Process getProcess(String name) {
       for (Process p : processes) {
-         if (p.getName().equals(name)) {
-            return p;
+         if (p.getName().equals(pname)) {
+            p.restart();
+            notifyProcessStarted(p);
          }
       }
-      return null;
    }
+   
 
-
+/**
+ * Called by a process or the interpreter to stop all
+ * processes with the matching name
+ */
+   protected void stopProcess(String pname) {
+      for (Process p : processes) {
+         if (p.getName().equals(pname)) {
+            p.stop();
+            notifyProcessStopped(p);
+         }
+      }
+   }
+   
+   
 /**
  * Returns true if a process is currently running
  */
    public boolean isProcessRunning(String name) {
-      Process p = getProcess(name);
-      return (p != null && p.isRunning());
+      for (Process p : processes) {
+         if (p.getName().equals(name)) {
+            if (p.isRunning()) return true;
+         }
+      }
+      return false;
    }
 
 
 /**
  * Invokes a built-in robot command
  */
-   public void invokeFunction(Process p, String func, int [] args) {
-      if (robot == null) return;
+   public int invokeFunction(Process p, String func, int [] args) {
+      if (robot == null) return 0;
       try {
          Method m = robot.getClass().getMethod(func, args.getClass());
-         m.invoke(robot, args);
+         Integer result = (Integer)m.invoke(robot, args);
+         return (result != null)? result.intValue() : 0;
       } catch (Exception x) {
          error(p, "Undefined robot function: " + func);
+         return 0;
       }
    }
-
+   
 
    public void run() {
       
@@ -294,7 +291,11 @@ public class Interpreter implements Runnable {
          this.labels.put(instr[0], count - 1);
       }
       else if ("process".equals(instr[0])) {
-         this.processes.add(new Process(this, instr[1], count - 1));
+         if (instr.length == 2) {
+            this.processes.add(new Process(this, instr[1], count - 1));
+         } else {
+            this.processes.add(new Process(this, count - 1));
+         }
       }
       else if ("function".equals(instr[0])) {
          this.labels.put(instr[1], count);
