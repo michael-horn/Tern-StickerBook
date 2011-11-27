@@ -185,6 +185,9 @@ public abstract class TernAnalyzer extends Analyzer {
         case TernConstants.PROCEDURE_CALL:
             enterProcedureCall((Production) node);
             break;
+        case TernConstants.FUNCTION_CALL:
+            enterFunctionCall((Production) node);
+            break;
         case TernConstants.ACTUAL_PARAM_LIST:
             enterActualParamList((Production) node);
             break;
@@ -349,6 +352,8 @@ public abstract class TernAnalyzer extends Analyzer {
             return exitWhileCondition((Production) node);
         case TernConstants.PROCEDURE_CALL:
             return exitProcedureCall((Production) node);
+        case TernConstants.FUNCTION_CALL:
+            return exitFunctionCall((Production) node);
         case TernConstants.ACTUAL_PARAM_LIST:
             return exitActualParamList((Production) node);
         case TernConstants.ASSIGNMENT:
@@ -439,6 +444,9 @@ public abstract class TernAnalyzer extends Analyzer {
             break;
         case TernConstants.PROCEDURE_CALL:
             childProcedureCall(node, child);
+            break;
+        case TernConstants.FUNCTION_CALL:
+            childFunctionCall(node, child);
             break;
         case TernConstants.ACTUAL_PARAM_LIST:
             childActualParamList(node, child);
@@ -1978,6 +1986,47 @@ public abstract class TernAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childProcedureCall(Production node, Node child)
+        throws ParseException {
+
+        node.addChild(child);
+    }
+
+    /**
+     * Called when entering a parse tree node.
+     *
+     * @param node           the node being entered
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected void enterFunctionCall(Production node)
+        throws ParseException {
+    }
+
+    /**
+     * Called when exiting a parse tree node.
+     *
+     * @param node           the node being exited
+     *
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected Node exitFunctionCall(Production node)
+        throws ParseException {
+
+        return node;
+    }
+
+    /**
+     * Called when adding a child to a parse tree node.
+     *
+     * @param node           the parent node
+     * @param child          the child node, or null
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected void childFunctionCall(Production node, Node child)
         throws ParseException {
 
         node.addChild(child);

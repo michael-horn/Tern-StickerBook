@@ -227,6 +227,13 @@ public class TernParser extends RecursiveDescentParser {
         pattern = new ProductionPattern(TernConstants.PROCEDURE_CALL,
                                         "ProcedureCall");
         alt = new ProductionPatternAlternative();
+        alt.addProduction(TernConstants.FUNCTION_CALL, 1, 1);
+        pattern.addAlternative(alt);
+        addPattern(pattern);
+
+        pattern = new ProductionPattern(TernConstants.FUNCTION_CALL,
+                                        "FunctionCall");
+        alt = new ProductionPatternAlternative();
         alt.addToken(TernConstants.IDENTIFIER, 1, 1);
         alt.addToken(TernConstants.LEFT_PAREN, 1, 1);
         alt.addProduction(TernConstants.ACTUAL_PARAM_LIST, 0, 1);
@@ -393,6 +400,9 @@ public class TernParser extends RecursiveDescentParser {
         alt.addProduction(TernConstants.EXPRESSION, 1, 1);
         alt.addToken(TernConstants.RIGHT_PAREN, 1, 1);
         pattern.addAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.addProduction(TernConstants.FUNCTION_CALL, 1, 1);
+        pattern.addAlternative(alt);
         addPattern(pattern);
 
         pattern = new ProductionPattern(TernConstants.EX_ATOM,
@@ -425,9 +435,6 @@ public class TernParser extends RecursiveDescentParser {
         pattern.addAlternative(alt);
         alt = new ProductionPatternAlternative();
         alt.addProduction(TernConstants.COMMAND, 1, 1);
-        pattern.addAlternative(alt);
-        alt = new ProductionPatternAlternative();
-        alt.addProduction(TernConstants.EXPRESSION, 1, 1);
         pattern.addAlternative(alt);
         addPattern(pattern);
 
