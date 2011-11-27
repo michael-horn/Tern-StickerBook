@@ -118,5 +118,4 @@ push 2
 frame
 push 2
 remote showImage
-push 0
 return
