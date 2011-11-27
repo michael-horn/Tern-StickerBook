@@ -13,3 +13,5 @@ import doSit()
 import doStand()
 
 import doSpin()
+
+import getTouchSensor()
