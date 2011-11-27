@@ -106,6 +106,11 @@ public class Roberto implements Debugger {
    }
    
    
+   public int getTouchSensor(int [] args) {
+      return 1;
+   }
+   
+   
    public void processStarted(Process p) {
    }
    
