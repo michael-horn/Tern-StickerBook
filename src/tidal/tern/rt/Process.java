@@ -74,6 +74,14 @@ public class Process {
       this.rand     = new java.util.Random();
       this.stack    = new int[MAX_STACK];
    }
+   
+   
+/**
+ * Creates an unnamed (anonymous) process
+ */
+   public Process(Interpreter in, int start) {
+      this(in, "__anonymous__", start);
+   }
 
 
    public String getName() {
@@ -135,14 +143,14 @@ public class Process {
          String opcode = instr[0];
          
          //-----------------------------------------------------
-         // Comments
+         // Stop instructions (2 forms)
          //-----------------------------------------------------
          if ("stop".equals(opcode)) {
             if (instr.length == 1) {
-               STOP();
+               STOP();   // stop this process
                return false;
             } else if (instr.length > 1) {
-               STOP(instr[1]);
+               STOP(instr[1]);   // stop a named process
             }
          }
 
@@ -236,6 +244,9 @@ public class Process {
    }
 
 
+/**
+ * Replace the stack value at the given frame offset (fp + offset)
+ */
    protected void replace(int value, int offset) {
       int i = offset + fp;
       stack[i] = value;
@@ -278,13 +289,17 @@ public class Process {
    
    protected void REMOTE(String func) {
       int acount = pop();  // argument count
+      int result = 0;
+      
       if (acount <= 64) {
          int [] args = new int[acount];
          for (int i=acount-1; i >= 0; i--) {
             args[i] = pop();
          }
-         in.invokeFunction(this, func, args);
+         result = in.invokeFunction(this, func, args);
       }
+      
+      push(result);
    }
 
 
@@ -512,13 +527,16 @@ public class Process {
    }
 
 
+/**
+ * Pushes a copy the top stack value onto the stack
+ */
    protected void DUP() {
       int a = pop();
       push(a);
       push(a);
    }
    
-      
+
    protected static int parseInt(String s) {
       try {
          return Integer.parseInt(s);
