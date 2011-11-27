@@ -21,7 +21,6 @@
  */
 package tidal.tern;
 
-import android.widget.ImageView;
 import android.view.View;
 import android.graphics.Color;
 import android.graphics.Paint;
