@@ -260,7 +260,6 @@ public class TextCompiler extends TernAnalyzer {
       out.write("frame\n");
       out.write("push " + local.size() + "\n");
       out.write("remote " + t.getImage() + "\n");
-      out.write("push 0\n");
       out.write("return\n");
       this.local = null;
       return node;
