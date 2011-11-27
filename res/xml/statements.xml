@@ -157,12 +157,9 @@
 
               
    <!-- WAIT FOR -->
-   <statement code="611" name="Wait For">
+   <statement code="611" name="Wait For" class="tidal.tern.language.Wait">
       <socket name="prev" />
       <plug dx="4.5" dy="0" name="next" />
-      <code>
-         wait 1000
-      </code>
    </statement>
               
 </statements>
