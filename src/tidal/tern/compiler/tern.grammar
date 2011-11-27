@@ -98,11 +98,11 @@ WHITESPACE     = <<[ \t\r\n]+>> %ignore%
 //=============================================================
 %productions%
 
-Program = ( ProcessDef | ImportDef | ProcedureDef | Command | Expression )+ ;
+Program = ( ProcessDef | ImportDef | ProcedureDef | Command )+ ;
 
 Command =
      ControlStructure |
-	  ProcedureCall |
+     ProcedureCall |
 	  Assignment |
 	  BuiltInCommand ;
 
@@ -150,7 +150,9 @@ WhileCondition = Expression ;
 // Procedure Calls
 //-------------------------------------------------------------
 
-ProcedureCall = IDENTIFIER "(" [ ActualParamList ] ")" ;
+ProcedureCall = FunctionCall ;
+
+FunctionCall = IDENTIFIER "(" [ ActualParamList ] ")" ;
 
 ActualParamList = Expression ( "," Expression )* ;
 
@@ -197,6 +199,6 @@ BinaryOperator = "and" | "or" |
 
 UnaryFunction = "not" ExTerm ;
 
-ExTerm = ExAtom | "(" Expression ")" ;
+ExTerm = ExAtom | "(" Expression ")" | FunctionCall ;
 
 ExAtom = "true" | "false" | NUMBER | VariableName ;
