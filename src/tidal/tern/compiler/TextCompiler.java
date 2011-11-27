@@ -231,11 +231,15 @@ public class TextCompiler extends TernAnalyzer {
 //--------------------------------------------------------------------------
 
    protected Node exitProcedureCall(Production node) throws ParseException {
+      out.write("pop\n");
+      return node;
+   }
+
+   protected Node exitFunctionCall(Production node) throws ParseException {
       Token t = (Token)node.getChildAt(0);
       out.write("trace " + t.getImage() + "\n");
       out.write("load-address " + t.getImage() + "\n");
       out.write("call\n");
-      out.write("pop\n");  // dispose of return value
       return node;
    }
    
