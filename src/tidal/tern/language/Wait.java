@@ -41,7 +41,8 @@ public class Wait extends Statement {
    public void compile(PrintWriter out) throws CompileException {
       out.println("while not getTouchSensor():");
       out.println("{");
-      compileNext(out);
+      out.println("   wait 100");
       out.println("}");      
+      compileNext(out);
    }
 }
