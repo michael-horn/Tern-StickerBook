@@ -1,5 +1,5 @@
 /*
- * @(#) CompileException.java
+ * @(#) Tern.java
  * 
  * Tern Tangible Programming Language
  * Copyright (c) 2011 Michael S. Horn
@@ -41,9 +41,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -99,7 +96,7 @@ public class Tern extends Activity implements OnClickListener, Runnable {
    protected String status = "";
    
    /** Robot that "executes" the interpreter commands */
-   protected Roberto roberto;
+   protected Robot robot;
    
 
 //----------------------------------------------------------------   
@@ -127,10 +124,10 @@ public class Tern extends Activity implements OnClickListener, Runnable {
       this.compiler.setHeader(loadDriverFile());
 
       // Get the robot and link it to the interpreter
-      this.roberto = (Roberto)findViewById(R.id.Roberto);
-      this.roberto.setTern(this);
-      this.interp.addDebugger(roberto);
-      this.interp.setRobot(roberto);
+      this.robot = (Robot)findViewById(R.id.Robot);
+      this.robot.setTern(this);
+      this.interp.addDebugger(robot);
+      this.interp.setRobot(robot);
    }
    
    
@@ -204,7 +201,7 @@ public class Tern extends Activity implements OnClickListener, Runnable {
       }
       this.pd.dismiss();
       this.compiling = false;
-      this.roberto.invalidate();
+      this.robot.invalidate();
       
       if (!success) return;
       
