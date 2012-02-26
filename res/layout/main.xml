@@ -7,7 +7,7 @@
               android:padding="4dip">
    
    <tidal.tern.Roberto
-            android:id="@+id/Roberto"
+            android:id="@+id/Robot"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 </LinearLayout>
