@@ -6,3 +6,17 @@ Copyright 2011 Michael S. Horn
 michael-horn@northwestern.edu
 http://tidal.sesp.northwestern.edu
 Northwestern University
+
+
+How to Add Support for a New Robot
+---------------------------------------------
+
+1. Create a subclass of tidal.tern.Robot
+
+2. Add functions for robot actions (e.g. doStartMotor)
+
+3. Modify res/layout/main.xml to point to your subclass
+
+4. Modify res/raw/driver.tern to add external function declarations
+
+5. Modify res/xml/statements.xml to define blocks and code generation
