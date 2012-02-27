@@ -82,6 +82,16 @@ public class Robot extends View implements Debugger {
    }
    
    
+   public void openConnection() {
+      
+   }
+   
+   
+   public void closeConnection() {
+      
+   }
+   
+   
 /**
  * Thread safe invalidate function
  */
