@@ -2,7 +2,6 @@ package tidal.tern.compiler;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -62,29 +61,28 @@ public class TextCompilerTest extends TestCase {
    }
 
 
-   @Test public void testNumericExpressions() throws Exception {
+   public void testNumericExpressions() throws Exception {
       runTests("tests/test1.tern");
    }
    
-   @Test public void testBooleanExpressions() throws Exception {
+   public void testBooleanExpressions() throws Exception {
       runTests("tests/test2.tern");
    }
    
-   @Test public void testBuiltInExpressions() throws Exception {
+   public void testBuiltInExpressions() throws Exception {
       runTests("tests/test3.tern");
    }
    
-   @Test public void testProcedureCalls() throws Exception {
+   public void testProcedureCalls() throws Exception {
       runTests("tests/test4.tern");
    }
    
-   @Test public void testProcedureDecls() throws Exception {
+   public void testProcedureDecls() throws Exception {
       runTests("tests/test5.tern");
    }
    
-   @Test public void testWhileLoops() throws Exception {
+   public void testWhileLoops() throws Exception {
       runTests("tests/test6.tern");
    }
-   
 }
 
