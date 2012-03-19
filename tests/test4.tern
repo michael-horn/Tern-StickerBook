@@ -1,6 +1,5 @@
 grumble()
 -----------------
-trace grumble
 load-address grumble
 call
 pop
@@ -8,7 +7,6 @@ pop
 bounce(50)
 -----------------
 push 50
-trace bounce
 load-address bounce
 call
 pop
@@ -22,7 +20,6 @@ store-global
 push 0
 load-global
 push 100
-trace moveTo
 load-address moveTo
 call
 pop
@@ -50,7 +47,6 @@ push 2
 load-global
 not
 push 300
-trace zoom
 load-address zoom
 call
 pop

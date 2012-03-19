@@ -95,3 +95,7 @@ load-global
 -
 print
 =================
+print "hello world"
+-----------------
+print "hello world"
+=================

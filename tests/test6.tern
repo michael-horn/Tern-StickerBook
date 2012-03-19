@@ -9,7 +9,6 @@ push 1
 load-address :done0
 if-false
 push 30
-trace left
 load-address left
 call
 pop
@@ -120,7 +119,6 @@ push 0
 remote getTouchSensor
 return
 :while0
-trace getTouchSensor
 load-address getTouchSensor
 call
 not
