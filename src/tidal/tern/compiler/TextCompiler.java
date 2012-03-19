@@ -173,7 +173,18 @@ public class TextCompiler extends TernAnalyzer {
    }
    
    protected Node exitPrintCommand(Production node) throws ParseException {
-      out.write("print\n");
+      Node child = node.getChildAt(1);
+      if (child.getName().equalsIgnoreCase("STRING")) {
+         String s = ((Token)child).getImage();
+         
+         // strip quote characters
+         if (s.length() > 2) {
+            s = s.substring(1, s.length() - 1);
+         }
+         out.write("print " + s + "\n");
+      } else {
+         out.write("print\n");
+      }
       return node;
    }
    
@@ -237,7 +248,6 @@ public class TextCompiler extends TernAnalyzer {
 
    protected Node exitFunctionCall(Production node) throws ParseException {
       Token t = (Token)node.getChildAt(0);
-      out.write("trace " + t.getImage() + "\n");
       out.write("load-address " + t.getImage() + "\n");
       out.write("call\n");
       return node;
@@ -251,6 +261,7 @@ public class TextCompiler extends TernAnalyzer {
       out.write("frame\n");
       return node;
    }
+
    
    protected void enterImportDef(Production node) {
       this.local = new Scope();
