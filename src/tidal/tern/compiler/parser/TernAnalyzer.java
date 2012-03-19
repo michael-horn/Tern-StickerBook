@@ -140,6 +140,9 @@ public abstract class TernAnalyzer extends Analyzer {
         case TernConstants.IDENTIFIER:
             enterIdentifier((Token) node);
             break;
+        case TernConstants.STRING:
+            enterString((Token) node);
+            break;
         case TernConstants.PROGRAM:
             enterProgram((Production) node);
             break;
@@ -322,6 +325,8 @@ public abstract class TernAnalyzer extends Analyzer {
             return exitNumber((Token) node);
         case TernConstants.IDENTIFIER:
             return exitIdentifier((Token) node);
+        case TernConstants.STRING:
+            return exitString((Token) node);
         case TernConstants.PROGRAM:
             return exitProgram((Production) node);
         case TernConstants.COMMAND:
@@ -1382,6 +1387,30 @@ public abstract class TernAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitIdentifier(Token node) throws ParseException {
+        return node;
+    }
+
+    /**
+     * Called when entering a parse tree node.
+     *
+     * @param node           the node being entered
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected void enterString(Token node) throws ParseException {
+    }
+
+    /**
+     * Called when exiting a parse tree node.
+     *
+     * @param node           the node being exited
+     *
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected Node exitString(Token node) throws ParseException {
         return node;
     }
 

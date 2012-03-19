@@ -43,6 +43,11 @@ public class TernParser extends RecursiveDescentParser {
     private static final int SUBPRODUCTION_4 = 3004;
 
     /**
+     * A generated production node identity constant.
+     */
+    private static final int SUBPRODUCTION_5 = 3005;
+
+    /**
      * Creates a new parser with a default analyzer.
      *
      * @param in             the input stream to read from
@@ -286,7 +291,7 @@ public class TernParser extends RecursiveDescentParser {
                                         "PrintCommand");
         alt = new ProductionPatternAlternative();
         alt.addToken(TernConstants.PRINT, 1, 1);
-        alt.addProduction(TernConstants.EXPRESSION, 1, 1);
+        alt.addProduction(SUBPRODUCTION_5, 1, 1);
         pattern.addAlternative(alt);
         addPattern(pattern);
 
@@ -464,6 +469,17 @@ public class TernParser extends RecursiveDescentParser {
         alt = new ProductionPatternAlternative();
         alt.addToken(TernConstants.COMMA, 1, 1);
         alt.addProduction(TernConstants.EXPRESSION, 1, 1);
+        pattern.addAlternative(alt);
+        addPattern(pattern);
+
+        pattern = new ProductionPattern(SUBPRODUCTION_5,
+                                        "Subproduction5");
+        pattern.setSynthetic(true);
+        alt = new ProductionPatternAlternative();
+        alt.addProduction(TernConstants.EXPRESSION, 1, 1);
+        pattern.addAlternative(alt);
+        alt = new ProductionPatternAlternative();
+        alt.addToken(TernConstants.STRING, 1, 1);
         pattern.addAlternative(alt);
         addPattern(pattern);
     }

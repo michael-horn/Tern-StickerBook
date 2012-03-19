@@ -205,6 +205,11 @@ public interface TernConstants {
     public static final int WHITESPACE = 1038;
 
     /**
+     * A token identity constant.
+     */
+    public static final int STRING = 1039;
+
+    /**
      * A production node identity constant.
      */
     public static final int PROGRAM = 2001;

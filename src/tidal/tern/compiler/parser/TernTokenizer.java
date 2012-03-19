@@ -270,5 +270,11 @@ public class TernTokenizer extends Tokenizer {
                                    "[ \\t\\r\\n]+");
         pattern.setIgnore();
         addPattern(pattern);
+
+        pattern = new TokenPattern(TernConstants.STRING,
+                                   "STRING",
+                                   TokenPattern.REGEXP_TYPE,
+                                   "(\".*\")|('.*')");
+        addPattern(pattern);
     }
 }
