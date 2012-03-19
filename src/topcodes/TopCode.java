@@ -88,6 +88,19 @@ public class TopCode {
       this.y = 0;
       this.core = new int[WIDTH];
    }
+   
+   
+/**
+ * Create a clone of the given topcode
+ */
+   public TopCode(TopCode top) {
+      this();
+      this.code = top.code;
+      this.unit = top.unit;
+      this.orientation = top.orientation;
+      this.x = top.x;
+      this.y = top.y;
+   }
 
 
 /**
