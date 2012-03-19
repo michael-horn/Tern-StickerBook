@@ -188,6 +188,11 @@ public class TextCompiler extends TernAnalyzer {
       return node;
    }
    
+   protected Node exitTraceCommand(Production node) throws ParseException {
+      out.write("trace\n");
+      return node;
+   }
+   
    protected Node exitStartCommand(Production node) throws ParseException {
       Token process = (Token)node.getChildAt(1);
       out.write("start " + process.getImage() + "\n");
