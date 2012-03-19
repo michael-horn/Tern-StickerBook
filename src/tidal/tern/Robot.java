@@ -61,6 +61,12 @@ public class Robot extends View implements Debugger {
    /** Link back to the main activity */
    protected Tern tern = null;
    
+   /** Name of the current action */
+   protected String message = "";
+   
+   /** ID of current statement */
+   protected int trace_id = -1;
+   
    
    public Robot(Context context) {
       super(context);
@@ -82,13 +88,21 @@ public class Robot extends View implements Debugger {
    }
    
    
-   public void openConnection() {
+   public void openConnection(String address) {
       
    }
    
    
    public void closeConnection() {
       
+   }
+   
+   
+/**
+ * Compile ID number of current executing statement
+ */
+   public int getTraceID() {
+      return this.trace_id;
    }
    
    
@@ -148,6 +162,22 @@ public class Robot extends View implements Debugger {
       dy = h - dh - 10;
       button.setBounds(dx, dy, dx + dw, dy + dh);
       button.draw(canvas);
+      
+      
+      // draw message for current statement      
+      if (isRunning()) {
+         Paint font = new Paint(Paint.ANTI_ALIAS_FLAG);
+         font.setColor(Color.BLACK);
+         font.setStyle(Style.FILL);
+         font.setTextSize(30);
+         font.setTextAlign(Paint.Align.CENTER);
+         canvas.drawText(this.message, w/2, h - 15, font);
+      }
+   }
+   
+   
+   protected void drawProgramBitmap(Canvas canvas) {
+      this.tern.draw(canvas);
    }
 
    
@@ -172,11 +202,23 @@ public class Robot extends View implements Debugger {
    public void processStopped(Process p) {
       this.running = false;
    }
-   
-   public void trace(Process p, String message) { }
 
    
-   public void print(Process p, String message) { }
+   public void trace(Process p, String message) {
+      try {
+         this.trace_id = Integer.parseInt(message);
+         repaint();
+      } catch (Exception x) {
+         this.trace_id = -1;
+      }
+   }
+
+   
+   public void print(Process p, String message) {
+      Log.i(TAG, message);
+      this.message = message;
+      repaint();
+   }
    
    
    public void error(Process p, String message) {
