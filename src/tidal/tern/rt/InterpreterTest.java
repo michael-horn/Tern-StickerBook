@@ -2,7 +2,6 @@ package tidal.tern.rt;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.junit.Test;
 
 import java.io.Reader;
 import java.io.FileReader;
@@ -39,7 +38,7 @@ public class InterpreterTest extends TestCase {
    }
 
 
-   @Test public void testNumericExpressions() throws Exception {
+   public void testNumericExpressions() throws Exception {
       runTest("tests/interp.tern");
    }
    
