@@ -207,6 +207,7 @@ public class Robot extends View implements Debugger {
    public void trace(Process p, String message) {
       try {
          this.trace_id = Integer.parseInt(message);
+         this.tern.playPopSound();
          repaint();
       } catch (Exception x) {
          this.trace_id = -1;
