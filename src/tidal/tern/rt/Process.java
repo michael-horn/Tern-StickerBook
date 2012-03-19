@@ -153,6 +153,15 @@ public class Process {
                STOP(instr[1]);   // stop a named process
             }
          }
+         
+         else if ("print".equals(opcode)) {
+            if (instr.length == 1) {
+               PRINT();
+            } else {
+               PRINT(instr[1]);
+            }
+         }
+         
 
          //-----------------------------------------------------
          // Ugly instruction mapping
@@ -167,7 +176,6 @@ public class Process {
          else if ("load-address".equals(opcode)) { LOAD_ADDRESS(instr[1]); }
          else if ("exit".equals(opcode))         { EXIT(); return false; }
          else if ("yield".equals(opcode))        { YIELD(); return true; }
-         else if ("print".equals(opcode))        { PRINT(); }
          else if ("frame".equals(opcode))        { FRAME(); }
          else if ("goto".equals(opcode))         { GOTO(); }
          else if ("call".equals(opcode))         { CALL(); }
@@ -284,6 +292,11 @@ public class Process {
    protected void PRINT() {
       int value = pop();
       in.print(this, String.valueOf(value));
+   }
+   
+   
+   protected void PRINT(String s) {
+      in.print(this, s);
    }
    
    
