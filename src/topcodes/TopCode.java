@@ -457,7 +457,7 @@ public class TopCode {
       
       int bits = this.code;
       float sweep = 360.0f / SECTORS;
-      float a = (-orientation * 180 / PI);
+      float a = (orientation * 180 / PI);
       float r = WIDTH * 0.5f * unit;
       
       paint.setColor(Color.WHITE);
