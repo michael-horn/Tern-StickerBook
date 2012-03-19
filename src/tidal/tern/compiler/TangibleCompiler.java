@@ -114,6 +114,7 @@ public class TangibleCompiler {
       }
       String tcode = header + "\n" + sw.toString();
       program.setTextCode(tcode);
+      Log.i("TangibleCompiler", tcode);
 
       
       //-----------------------------------------------------------
@@ -121,6 +122,7 @@ public class TangibleCompiler {
       //-----------------------------------------------------------
       String pcode = tcompiler.compile(tcode);
       program.setAssemblyCode(pcode);
+      Log.i("TangibleCompiler", pcode);
 
       return program;
    }
