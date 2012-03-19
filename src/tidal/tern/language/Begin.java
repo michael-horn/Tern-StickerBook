@@ -41,6 +41,7 @@ public class Begin extends Statement {
    public void compile(PrintWriter out) throws CompileException {
       out.println("process main:");
       out.println("{");
+      out.println("trace " + getCompileID());
       compileNext(out);
       out.println("}");      
    }
