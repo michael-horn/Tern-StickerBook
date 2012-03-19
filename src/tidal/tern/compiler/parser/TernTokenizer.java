@@ -138,6 +138,12 @@ public class TernTokenizer extends Tokenizer {
                                    "print");
         addPattern(pattern);
 
+        pattern = new TokenPattern(TernConstants.TRACE,
+                                   "TRACE",
+                                   TokenPattern.STRING_TYPE,
+                                   "trace");
+        addPattern(pattern);
+
         pattern = new TokenPattern(TernConstants.RAND,
                                    "RAND",
                                    TokenPattern.STRING_TYPE,

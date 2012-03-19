@@ -97,117 +97,122 @@ public interface TernConstants {
     /**
      * A token identity constant.
      */
-    public static final int RAND = 1017;
+    public static final int TRACE = 1017;
 
     /**
      * A token identity constant.
      */
-    public static final int START = 1018;
+    public static final int RAND = 1018;
 
     /**
      * A token identity constant.
      */
-    public static final int STOP = 1019;
+    public static final int START = 1019;
 
     /**
      * A token identity constant.
      */
-    public static final int LESS_THAN = 1020;
+    public static final int STOP = 1020;
 
     /**
      * A token identity constant.
      */
-    public static final int LESS_THAN_EQ = 1021;
+    public static final int LESS_THAN = 1021;
 
     /**
      * A token identity constant.
      */
-    public static final int GREATER_THAN = 1022;
+    public static final int LESS_THAN_EQ = 1022;
 
     /**
      * A token identity constant.
      */
-    public static final int GREATER_THAN_EQ = 1023;
+    public static final int GREATER_THAN = 1023;
 
     /**
      * A token identity constant.
      */
-    public static final int NOT_EQUAL = 1024;
+    public static final int GREATER_THAN_EQ = 1024;
 
     /**
      * A token identity constant.
      */
-    public static final int EQUAL = 1025;
+    public static final int NOT_EQUAL = 1025;
 
     /**
      * A token identity constant.
      */
-    public static final int ADD = 1026;
+    public static final int EQUAL = 1026;
 
     /**
      * A token identity constant.
      */
-    public static final int SUB = 1027;
+    public static final int ADD = 1027;
 
     /**
      * A token identity constant.
      */
-    public static final int MUL = 1028;
+    public static final int SUB = 1028;
 
     /**
      * A token identity constant.
      */
-    public static final int DIV = 1029;
+    public static final int MUL = 1029;
 
     /**
      * A token identity constant.
      */
-    public static final int RANDOM = 1030;
+    public static final int DIV = 1030;
 
     /**
      * A token identity constant.
      */
-    public static final int OR = 1031;
+    public static final int RANDOM = 1031;
 
     /**
      * A token identity constant.
      */
-    public static final int NOT = 1032;
+    public static final int OR = 1032;
 
     /**
      * A token identity constant.
      */
-    public static final int AND = 1033;
+    public static final int NOT = 1033;
 
     /**
      * A token identity constant.
      */
-    public static final int TRUE = 1034;
+    public static final int AND = 1034;
 
     /**
      * A token identity constant.
      */
-    public static final int FALSE = 1035;
+    public static final int TRUE = 1035;
 
     /**
      * A token identity constant.
      */
-    public static final int NUMBER = 1036;
+    public static final int FALSE = 1036;
 
     /**
      * A token identity constant.
      */
-    public static final int IDENTIFIER = 1037;
+    public static final int NUMBER = 1037;
 
     /**
      * A token identity constant.
      */
-    public static final int WHITESPACE = 1038;
+    public static final int IDENTIFIER = 1038;
 
     /**
      * A token identity constant.
      */
-    public static final int STRING = 1039;
+    public static final int WHITESPACE = 1039;
+
+    /**
+     * A token identity constant.
+     */
+    public static final int STRING = 1040;
 
     /**
      * A production node identity constant.
@@ -317,50 +322,55 @@ public interface TernConstants {
     /**
      * A production node identity constant.
      */
-    public static final int START_COMMAND = 2022;
+    public static final int TRACE_COMMAND = 2022;
 
     /**
      * A production node identity constant.
      */
-    public static final int STOP_COMMAND = 2023;
+    public static final int START_COMMAND = 2023;
 
     /**
      * A production node identity constant.
      */
-    public static final int VARIABLE_NAME = 2024;
+    public static final int STOP_COMMAND = 2024;
 
     /**
      * A production node identity constant.
      */
-    public static final int EXPRESSION = 2025;
+    public static final int VARIABLE_NAME = 2025;
 
     /**
      * A production node identity constant.
      */
-    public static final int EX_FUNCTION = 2026;
+    public static final int EXPRESSION = 2026;
 
     /**
      * A production node identity constant.
      */
-    public static final int BINARY_FUNCTION = 2027;
+    public static final int EX_FUNCTION = 2027;
 
     /**
      * A production node identity constant.
      */
-    public static final int BINARY_OPERATOR = 2028;
+    public static final int BINARY_FUNCTION = 2028;
 
     /**
      * A production node identity constant.
      */
-    public static final int UNARY_FUNCTION = 2029;
+    public static final int BINARY_OPERATOR = 2029;
 
     /**
      * A production node identity constant.
      */
-    public static final int EX_TERM = 2030;
+    public static final int UNARY_FUNCTION = 2030;
 
     /**
      * A production node identity constant.
      */
-    public static final int EX_ATOM = 2031;
+    public static final int EX_TERM = 2031;
+
+    /**
+     * A production node identity constant.
+     */
+    public static final int EX_ATOM = 2032;
 }

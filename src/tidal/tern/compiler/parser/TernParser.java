@@ -272,6 +272,9 @@ public class TernParser extends RecursiveDescentParser {
         alt.addProduction(TernConstants.PRINT_COMMAND, 1, 1);
         pattern.addAlternative(alt);
         alt = new ProductionPatternAlternative();
+        alt.addProduction(TernConstants.TRACE_COMMAND, 1, 1);
+        pattern.addAlternative(alt);
+        alt = new ProductionPatternAlternative();
         alt.addProduction(TernConstants.START_COMMAND, 1, 1);
         pattern.addAlternative(alt);
         alt = new ProductionPatternAlternative();
@@ -292,6 +295,14 @@ public class TernParser extends RecursiveDescentParser {
         alt = new ProductionPatternAlternative();
         alt.addToken(TernConstants.PRINT, 1, 1);
         alt.addProduction(SUBPRODUCTION_5, 1, 1);
+        pattern.addAlternative(alt);
+        addPattern(pattern);
+
+        pattern = new ProductionPattern(TernConstants.TRACE_COMMAND,
+                                        "TraceCommand");
+        alt = new ProductionPatternAlternative();
+        alt.addToken(TernConstants.TRACE, 1, 1);
+        alt.addProduction(TernConstants.EXPRESSION, 1, 1);
         pattern.addAlternative(alt);
         addPattern(pattern);
 

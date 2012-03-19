@@ -77,6 +77,9 @@ public abstract class TernAnalyzer extends Analyzer {
         case TernConstants.PRINT:
             enterPrint((Token) node);
             break;
+        case TernConstants.TRACE:
+            enterTrace((Token) node);
+            break;
         case TernConstants.RAND:
             enterRand((Token) node);
             break;
@@ -206,6 +209,9 @@ public abstract class TernAnalyzer extends Analyzer {
         case TernConstants.PRINT_COMMAND:
             enterPrintCommand((Production) node);
             break;
+        case TernConstants.TRACE_COMMAND:
+            enterTraceCommand((Production) node);
+            break;
         case TernConstants.START_COMMAND:
             enterStartCommand((Production) node);
             break;
@@ -283,6 +289,8 @@ public abstract class TernAnalyzer extends Analyzer {
             return exitWait((Token) node);
         case TernConstants.PRINT:
             return exitPrint((Token) node);
+        case TernConstants.TRACE:
+            return exitTrace((Token) node);
         case TernConstants.RAND:
             return exitRand((Token) node);
         case TernConstants.START:
@@ -369,6 +377,8 @@ public abstract class TernAnalyzer extends Analyzer {
             return exitWaitCommand((Production) node);
         case TernConstants.PRINT_COMMAND:
             return exitPrintCommand((Production) node);
+        case TernConstants.TRACE_COMMAND:
+            return exitTraceCommand((Production) node);
         case TernConstants.START_COMMAND:
             return exitStartCommand((Production) node);
         case TernConstants.STOP_COMMAND:
@@ -467,6 +477,9 @@ public abstract class TernAnalyzer extends Analyzer {
             break;
         case TernConstants.PRINT_COMMAND:
             childPrintCommand(node, child);
+            break;
+        case TernConstants.TRACE_COMMAND:
+            childTraceCommand(node, child);
             break;
         case TernConstants.START_COMMAND:
             childStartCommand(node, child);
@@ -882,6 +895,30 @@ public abstract class TernAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected Node exitPrint(Token node) throws ParseException {
+        return node;
+    }
+
+    /**
+     * Called when entering a parse tree node.
+     *
+     * @param node           the node being entered
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected void enterTrace(Token node) throws ParseException {
+    }
+
+    /**
+     * Called when exiting a parse tree node.
+     *
+     * @param node           the node being exited
+     *
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected Node exitTrace(Token node) throws ParseException {
         return node;
     }
 
@@ -2261,6 +2298,47 @@ public abstract class TernAnalyzer extends Analyzer {
      * @throws ParseException if the node analysis discovered errors
      */
     protected void childPrintCommand(Production node, Node child)
+        throws ParseException {
+
+        node.addChild(child);
+    }
+
+    /**
+     * Called when entering a parse tree node.
+     *
+     * @param node           the node being entered
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected void enterTraceCommand(Production node)
+        throws ParseException {
+    }
+
+    /**
+     * Called when exiting a parse tree node.
+     *
+     * @param node           the node being exited
+     *
+     * @return the node to add to the parse tree, or
+     *         null if no parse tree should be created
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected Node exitTraceCommand(Production node)
+        throws ParseException {
+
+        return node;
+    }
+
+    /**
+     * Called when adding a child to a parse tree node.
+     *
+     * @param node           the parent node
+     * @param child          the child node, or null
+     *
+     * @throws ParseException if the node analysis discovered errors
+     */
+    protected void childTraceCommand(Production node, Node child)
         throws ParseException {
 
         node.addChild(child);
