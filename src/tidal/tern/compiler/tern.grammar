@@ -54,6 +54,7 @@ WHILE          = "while"
 //-------------------------------------------------------------
 WAIT           = "wait"
 PRINT          = "print"
+TRACE          = "trace"
 RAND           = "rand"
 START          = "start"
 STOP           = "stop"
@@ -170,12 +171,15 @@ Assignment = IDENTIFIER ASSIGN Expression ;
 
 BuiltInCommand = WaitCommand |
                  PrintCommand |
+                 TraceCommand |
                  StartCommand |
                  StopCommand ;
 
 WaitCommand = "wait" Expression ;
 
 PrintCommand = "print" ( Expression | STRING ) ;
+
+TraceCommand = "trace" Expression ;
 
 StartCommand = "start" IDENTIFIER ;
 
