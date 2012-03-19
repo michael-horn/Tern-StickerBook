@@ -95,6 +95,7 @@ public class Statement {
  * Translates a tangible statement into a text-based representation
  */
    public void compile(PrintWriter out) throws CompileException {
+      out.println("trace " + getCompileID());
       out.println(this.text);
       compileNext(out);
    }
