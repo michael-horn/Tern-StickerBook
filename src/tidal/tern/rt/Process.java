@@ -170,7 +170,7 @@ public class Process {
          else if ("function".equals(opcode))     { ; }
          else if ("process".equals(opcode))      { in.notifyProcessStarted(this); }
          else if ("push".equals(opcode))         { PUSH(instr[1]); }
-         else if ("trace".equals(opcode))        { TRACE(instr[1]); }
+         else if ("trace".equals(opcode))        { TRACE(); }
          else if ("remote".equals(opcode))       { REMOTE(instr[1]); }
          else if ("start".equals(opcode))        { START(instr[1]); }
          else if ("load-address".equals(opcode)) { LOAD_ADDRESS(instr[1]); }
@@ -530,8 +530,9 @@ public class Process {
    }
    
 
-   protected void TRACE(String message) {
-      this.in.trace(this, message);
+   protected void TRACE() {
+      int val = pop();
+      this.in.trace(this, String.valueOf(val));
    }
    
    
