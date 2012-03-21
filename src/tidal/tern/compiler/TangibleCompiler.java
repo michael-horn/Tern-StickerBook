@@ -28,8 +28,15 @@ package tidal.tern.compiler;
 import java.util.List;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+
 import android.util.Log;
 import android.graphics.Bitmap;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
+
 import topcodes.*;
 
 
@@ -40,6 +47,7 @@ import topcodes.*;
  */
 public class TangibleCompiler {
    
+   public static final String TAG = "TangibleCompiler";
 
    /** Scans image bitmap files for topcodes */
    protected Scanner scanner;
@@ -51,17 +59,30 @@ public class TangibleCompiler {
    protected String header;
    
    
-   public TangibleCompiler() {
+   public TangibleCompiler(Resources res, int statements, int driver) {
       this.scanner    = new Scanner();
       this.tcompiler  = new TextCompiler();
       this.header     = "";
+      
+      try {
+         
+         // Initialize tangible StatementFactory
+         StatementFactory.loadStatements(res.getXml(statements));
+      
+         // Load driver code
+         BufferedReader in = new BufferedReader(
+            new InputStreamReader(res.openRawResource(driver)));
+         String line;
+         while ((line = in.readLine()) != null) {
+            header += line + "\n";
+         }
+      } catch (java.io.IOException iox) {
+         Log.e(TAG, "Error reading header file", iox);
+      } catch (CompileException cx) {
+         Log.e(TAG, "Error configuring statements", cx);
+      }
    }
    
-   
-   public void setHeader(String header) {
-      this.header = header;
-   }
-
 
 /**
  * Tangible compile function: generate a program from a bitmap image
@@ -84,7 +105,7 @@ public class TangibleCompiler {
          Statement s = StatementFactory.createStatement(top);
          if (s != null) {
             program.addStatement(s);
-            Log.i("TangibleCompiler", "Found: " + s);
+            Log.i(TAG, "Found: " + s);
          }
       }
 
