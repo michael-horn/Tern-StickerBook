@@ -1,0 +1,20 @@
+import doJump()
+
+import doRun()
+
+import doWalk()
+
+import doWiggle()
+
+import doSleep()
+
+import doSit()
+
+import doStand()
+
+import doSpin()
+
+import doYawn()
+
+import getTouchSensor()
+
