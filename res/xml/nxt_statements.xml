@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<statements>
+   
+   <!-- BEGIN -->
+   <statement code="569" name="Begin" start="true" class="tidal.tern.language.Begin">
+      <plug dx="4.2" dy="0" name="next" />
+   </statement>
+   
+   
+   <!-- END -->
+   <statement code="369" name="End">
+      <socket name="prev" />
+   </statement>
+
+   
+   <!-- FORWARD -->
+   <statement code="405" name="Forward">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doForward()
+      </code>
+   </statement>
+
+   
+   <!-- BACKWARD -->
+   <statement code="185" name="Backward">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doBackward()
+      </code>
+   </statement>
+   
+      
+   <!-- LEFT -->
+   <statement code="1189" name="Left">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doLeft()
+      </code>
+   </statement>
+   
+   
+   <!-- RIGHT -->
+   <statement code="61" name="Right">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doRight()
+      </code>
+   </statement>
+   
+   
+   <!-- SPIN -->
+   <statement code="331" name="Spin">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doSpin()
+      </code>
+   </statement>
+
+
+   <!-- GROWL -->
+   <statement code="307" name="Growl">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         print "Growl"
+         doGrowl()
+         wait 2000
+      </code>
+   </statement>
+   
+   
+   <!-- BEEP -->
+   <statement code="661" name="Beep">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         print "Beep"
+         doBeep()
+         wait 2000
+      </code>
+   </statement>
+   
+      
+   <!-- SING -->
+   <statement code="397" name="Sing">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         print "Sing"
+         doSing()
+         wait 2000
+      </code>
+   </statement>
+
+              
+   <!-- SHAKE -->
+   <statement code="557" name="Shake">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doShake()
+      </code>
+   </statement>
+
+
+   <!-- WIGGLE -->
+   <statement code="155" name="Wiggle">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doWiggle()
+      </code>
+   </statement>
+   
+              
+   <!-- TAP SENSOR (push down) -->
+   <statement code="419" name="Tap Sensor">
+      <socket name="prev" />
+      <plug dx="3" dy="0" name="next" />
+      <code>
+         wait 1000
+      </code>
+   </statement>
+
+              
+   <!-- BEGIN REPEAT -->
+   <statement code="171" name="Begin Repeat">
+      <socket name="prev" />
+      <plug dx="2.9" dy="0" name="next" />
+      <code>
+         while true:
+         {
+      </code>
+   </statement>
+
+
+              
+   <!-- END REPEAT -->
+   <statement code="179" name="End Repeat">
+      <socket name="prev" />
+      <plug dx="2.9" dy="0" name="next" />
+      <code>
+            wait 100
+         }
+      </code>
+   </statement>
+
+
+              
+   <!-- WAIT FOR -->
+   <statement code="611" name="Wait For" class="tidal.tern.language.Wait">
+      <socket name="prev" />
+      <plug dx="2.9" dy="0" name="next" />
+   </statement>
+              
+</statements>

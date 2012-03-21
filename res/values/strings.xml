@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Tern</string>
+    <string name="app_name">Tern NXT</string>
     <string name="main_title">Tern Tangible Programming</string>
+    
+    <!-- Bluetooth NXT Information -->
+    <string name="nxt_address">00:16:53:00:1E:4F</string>
+    
+    
+    <!-- bluetooth messages -->
+    <string name="connecting_please_wait">Connecting to your robot.\nPlease wait...</string>
+    <string name="no_paired_nxt">No paired NXT robot found!</string>
+    <string name="problem_at_connecting">Problem in creating a connection!</string>
+    <string name="problem_at_closing">Problem in closing the connection!</string>
+    <string name="problem_at_sending">Problem in sending a message!</string>
+
+    <string name="problem_at_receiving">Problem in receiving a message!</string>  
+    <string name="current_position">Current position: </string>
+
+    <string name="bt_error_dialog_title">Bluetooth Error</string>    
+
+    <string name="bt_error_dialog_message">
+        Oh, no! It seems that your robot is not switched on. Please make sure that
+        your robot is on, has BlueTooth activated and then try again to connect.
+    </string>    
+    <string name="bt_needs_to_be_enabled">You need to enable BT first!"</string>
+    
+    
+    <!--  DeviceListActivity -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">Select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired LEGO Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for new devices</string>
+    <string name="pairing_message">After pairing, press menu and connect.</string>
+    <string name="wait_till_bt_on">Turning Bluetooth on (to connect to your robot)</string>
+    <string name="bt_off_message">Bluetooth turned off. See you later!</string>
+      
 </resources>
