@@ -11,8 +11,8 @@
    <uses-permission android:name="android.permission.CAMERA" />
    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
    <uses-permission android:name="android.permission.BLUETOOTH" />
-   
-   
+  
+
    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
       <activity android:name="Tern"
                 android:label="@string/app_name"
@@ -22,6 +22,10 @@
             <category android:name="android.intent.category.LAUNCHER" />
          </intent-filter>
       </activity>
-          
+		<activity android:name="com.lego.minddroid.DeviceListActivity"
+                android:screenOrientation="landscape"
+                android:label="@string/select_device"
+                android:theme="@android:style/Theme.Dialog">
+      </activity>   
    </application>
 </manifest> 
