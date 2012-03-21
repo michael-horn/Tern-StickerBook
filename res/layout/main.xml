@@ -6,8 +6,9 @@
               android:layout_height="fill_parent"
               android:padding="4dip">
    
-   <tidal.tern.Roberto
-            android:id="@+id/Robot"
+   <tidal.tern.ProgramView
+            android:id="@+id/ProgramView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
+
 </LinearLayout>
