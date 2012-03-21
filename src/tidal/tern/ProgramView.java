@@ -137,7 +137,7 @@ public class ProgramView extends View implements Debugger, Runnable {
       //------------------------------------------------------
       this.compiler = new TangibleCompiler(getResources(),
                                            R.xml.nxt_statements,
-                                           R.raw.driver);
+                                           R.raw.nxt_driver);
       
       //------------------------------------------------------
       // Initialize the "robot" connection manager
