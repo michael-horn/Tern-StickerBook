@@ -136,7 +136,7 @@ public class ProgramView extends View implements Debugger, Runnable {
       // Initialize the tangible compiler
       //------------------------------------------------------
       this.compiler = new TangibleCompiler(getResources(),
-                                           R.xml.statements,
+                                           R.xml.nxt_statements,
                                            R.raw.driver);
       
       //------------------------------------------------------
