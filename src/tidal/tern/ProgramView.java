@@ -92,9 +92,6 @@ public class ProgramView extends View implements Debugger, Runnable {
    /** ID of the current statement */
    protected int trace_id = -1;
    
-   /** Is a program running */
-   protected boolean running = false;
-   
    /** Progress dialog for compiles */   
    protected ProgressDialog pd = null;
    
@@ -143,6 +140,7 @@ public class ProgramView extends View implements Debugger, Runnable {
       // Initialize the "robot" connection manager
       //------------------------------------------------------
       this.robot = new NXTRobot(this);
+      this.robot.openConnection();
 
       //------------------------------------------------------
       // Initialize the runtime interpreter
@@ -179,14 +177,14 @@ public class ProgramView extends View implements Debugger, Runnable {
                   R.drawable.play,
                   R.drawable.play_dn,
                   R.drawable.play_off,
-                  playHandler);
+                  playPauseHandler);
       
       this.pause =
       new TButton(getResources(),
                   R.drawable.pause,
                   R.drawable.pause_dn,
                   R.drawable.pause_off,
-                  pauseHandler);
+                  playPauseHandler);
       
       this.restart =
       new TButton(getResources(),
@@ -261,10 +259,11 @@ public class ProgramView extends View implements Debugger, Runnable {
       
       Log.i(TAG, "Compile Finished");
       try {
-         this.interp.stop();
-         this.interp.clear();
-         this.interp.load(program.getAssemblyCode());
-         this.interp.start();
+         interp.stop();
+         interp.clear();
+         interp.load(program.getAssemblyCode());
+         interp.start();
+         repaint();
       } catch (Exception x) {
          Log.e(TAG, "Interpreter error", x);
       }
@@ -280,11 +279,6 @@ public class ProgramView extends View implements Debugger, Runnable {
          Log.e(TAG, cx.getMessage());
          compileHandler.sendEmptyMessage(COMPILE_FAILURE);
       }
-   }
-   
-   
-   public boolean isRunning() {
-      return this.running;
    }
    
    
@@ -314,7 +308,6 @@ public class ProgramView extends View implements Debugger, Runnable {
       
       Resources res   = getResources();
       Drawable logo   = res.getDrawable(R.drawable.logo);
-      Drawable status = res.getDrawable(robot.getIcon());
 
       // clear background 
       canvas.drawRGB(210, 210, 210);
@@ -330,16 +323,8 @@ public class ProgramView extends View implements Debugger, Runnable {
       logo.setBounds(dx, dy, dx + dw, dy + dh);
       logo.draw(canvas);
 
-      // draw robot indicator
-      dw = status.getIntrinsicWidth();
-      dh = status.getIntrinsicHeight();
-      dx = 10;
-      dy = h - dh - 10;
-      status.setBounds(dx, dy, dx + dw, dy + dh);
-      status.draw(canvas);
-      
       // draw message for current statement      
-      if (isRunning()) {
+      if (message != null && bitmap != null) {
          Paint font = new Paint(Paint.ANTI_ALIAS_FLAG);
          font.setColor(Color.BLACK);
          font.setStyle(Style.FILL);
@@ -379,26 +364,66 @@ public class ProgramView extends View implements Debugger, Runnable {
          canvas.restore();
       }
       
-      // Draw buttons
-      this.camera.setLocation(w - 110, 10);
-      this.gallery.setLocation(w - 110, 115);
-      this.restart.setLocation(w - 110, 220);
-      this.play.setLocation(w - 110, 325);
-      this.pause.setLocation(w - 110, 325);
-      this.config.setLocation(w - 110, 430);
-      
+      // Draw CAMERA button
+      dw = this.camera.getWidth();
+      dh = this.camera.getHeight();
+      this.camera.setLocation(w - dw - 12, h - dh - 12);
       this.camera.setEnabled( !compiling );
-      this.gallery.setEnabled( !compiling );
-      this.restart.setEnabled( !compiling && bitmap != null );
-      this.play.setEnabled( isRunning() );
-      this.pause.setEnabled( isRunning() );
-      this.config.setEnabled( !compiling );
-      
       this.camera.draw(canvas);
+      
+      // Draw GALLERY button
+      dx = w - gallery.getWidth() - camera.getWidth() - 36;
+      dy = h - gallery.getHeight() - 5;
+      this.gallery.setLocation(dx, dy);
+      this.gallery.setEnabled( !compiling );
       this.gallery.draw(canvas);
-      this.restart.draw(canvas);
-      this.pause.draw(canvas);
+
+      // Draw CONFIG button 
+      this.config.setLocation(3, h - config.getHeight() - 3);
+      this.config.setEnabled( true );
+      this.config.setUpImage(
+            getResources(),
+            robot.isConnected() ? R.drawable.config : R.drawable.config_off );
       this.config.draw(canvas);
+
+      // Draw play control toolbox
+      dw = this.play.getWidth();
+      dh = this.play.getHeight();
+      this.play.setLocation(w/2 + 5, h - dh - 15);
+      this.pause.setLocation(w/2 + 5, h - dh - 15);
+      this.restart.setLocation(w/2 - dw - 5, h - dh - 15);
+
+      // Draw toolbox border
+      if (program != null && bitmap != null) {
+         dx = w/2 - dw - 20;
+         dy = h - dh - 25;
+         dw = this.play.getWidth() * 2 + 40;
+         dh = this.play.getHeight() + 20;
+         RectF toolbox = new RectF(dx, dy, dx + dw, dy + dh);
+         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+         paint.setColor(Color.WHITE);
+         paint.setStyle(Paint.Style.FILL);
+         canvas.drawRoundRect(toolbox, 10, 10, paint);
+         paint.setColor(Color.BLACK);
+         paint.setStyle(Paint.Style.STROKE);
+         canvas.drawRoundRect(toolbox, 10, 10, paint);
+      }
+      
+      this.play.setEnabled( false );
+      this.pause.setEnabled( false );
+      this.restart.setEnabled( false );
+      
+      if (program != null && bitmap != null) {
+         this.restart.enable();
+         this.restart.draw(canvas);
+         if (interp.isPaused() || interp.isStopped()) {
+            this.play.enable();
+            this.play.draw(canvas);
+         } else {
+            this.pause.enable();
+            this.pause.draw(canvas);
+         }
+      }
    }
 
    
@@ -415,16 +440,10 @@ public class ProgramView extends View implements Debugger, Runnable {
 /**
  * DEBUGGER IMPLEMENTATION
  */
-   public void processStarted(tidal.tern.rt.Process p) {
-      this.running = true;
-      repaint();
-   }
+   public void processStarted(tidal.tern.rt.Process p) { }
    
    
-   public void processStopped(tidal.tern.rt.Process p) {
-      this.running = false;
-      repaint();
-   }
+   public void processStopped(tidal.tern.rt.Process p) { }
 
    
    public void trace(tidal.tern.rt.Process p, String message) {
@@ -448,7 +467,6 @@ public class ProgramView extends View implements Debugger, Runnable {
    public void error(tidal.tern.rt.Process p, String message) {
       Log.i(TAG, message);
       this.message = message;
-      this.running = false;
       repaint();
    }
    
@@ -485,19 +503,21 @@ public class ProgramView extends View implements Debugger, Runnable {
       }
    };
    
-   private Handler playHandler = new Handler() {
+   private Handler playPauseHandler = new Handler() {
       @Override public void handleMessage(Message msg) {
-      }
-   };
-   
-   private Handler pauseHandler = new Handler() {
-      @Override public void handleMessage(Message msg) {
+         if (interp.isPaused()) {
+            interp.resume();
+         } else if (interp.isStopped()) {
+            interp.restart();
+         } else {
+            interp.pause();
+         }
       }
    };
    
    private Handler restartHandler = new Handler() {
       @Override public void handleMessage(Message msg) {
-         finishCompile(true);
+         interp.restart();
       }
    };
    
