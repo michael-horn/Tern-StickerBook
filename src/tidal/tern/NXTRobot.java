@@ -33,6 +33,7 @@ import android.os.Message;
 import com.lego.minddroid.BTConnectable;
 import com.lego.minddroid.BTCommunicator;
 
+import tidal.tern.rt.Robot;
 
 /**
  * NXT implementation of Robot
@@ -47,7 +48,7 @@ public class NXTRobot implements Robot, BTConnectable {
    
    protected boolean pairing = false;
    
-   protected String address = "00:16:53:00:1E:4F";
+   protected String address = "00:16:53:10:AC:54";
    
    protected BTCommunicator nxt = null;
    
@@ -66,8 +67,9 @@ public class NXTRobot implements Robot, BTConnectable {
    
    
    public void openConnection() {
+      if (address == null) return;
       this.connected = false;
-      this.view.showProgressDialog("Connecting...");
+      //this.view.showProgressDialog("Connecting...");
       if (this.nxt != null) {
          try {
             this.nxt.destroyNXTconnection();
@@ -101,6 +103,13 @@ public class NXTRobot implements Robot, BTConnectable {
    
    public int getIcon() {
       return isConnected() ? R.drawable.nxt : R.drawable.nxt_fade;
+   }
+   
+   
+   public void allStop() {
+      sendBTCmessage(BTCommunicator.NO_DELAY, 0, 0, 0);
+      sendBTCmessage(BTCommunicator.NO_DELAY, 0, 0, 0);
+      sendBTCmessage(BTCommunicator.NO_DELAY, 0, 0, 0);
    }
    
    
@@ -193,7 +202,7 @@ public class NXTRobot implements Robot, BTConnectable {
             
             case BTCommunicator.STATE_CONNECTED:
                connected = true;
-               view.hideProgressDialog();
+               //view.hideProgressDialog();
                sendBTCmessage(BTCommunicator.NO_DELAY, BTCommunicator.GET_FIRMWARE_VERSION, 0, 0);
                Log.i(TAG, "Connected to NXT!");
                view.repaint();
@@ -203,14 +212,14 @@ public class NXTRobot implements Robot, BTConnectable {
                break;
             
             case BTCommunicator.STATE_CONNECTERROR_PAIRING:
-               view.hideProgressDialog();
+               //view.hideProgressDialog();
                closeConnection();
                break;
             
             case BTCommunicator.STATE_CONNECTERROR:
             case BTCommunicator.STATE_RECEIVEERROR:
             case BTCommunicator.STATE_SENDERROR:
-               view.hideProgressDialog();
+               //view.hideProgressDialog();
                closeConnection();
                Log.e(TAG, "Connection error " + message.getData());
                break;
