@@ -70,6 +70,21 @@ public class TButton {
    }
    
    
+   public void setDownImage(Resources res, int dn) {
+      this.btn_dn = res.getDrawable(dn);
+   }
+   
+   
+   public void setUpImage(Resources res, int up) {
+      this.btn_up = res.getDrawable(up);
+   }
+   
+   
+   public void setDisabledImage(Resources res, int da) {
+      this.btn_da = res.getDrawable(da);
+   }
+   
+   
    public void setCenter(int centerX, int centerY) {
       this.x = centerX - width/2;
       this.y = centerY - height/2;
@@ -81,6 +96,15 @@ public class TButton {
       this.y = y;
    }
    
+   
+   public int getWidth() {
+      return this.width;
+   }
+   
+   
+   public int getHeight() {
+      return this.height;
+   }
    
    public void setEnabled(boolean enabled) {
       this.enabled = enabled;
