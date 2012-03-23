@@ -10,6 +10,10 @@
    <!-- END -->
    <statement code="369" name="End">
       <socket name="prev" />
+      <code>
+         print "Done!"
+         wait 200
+      </code>
    </statement>
 
    
