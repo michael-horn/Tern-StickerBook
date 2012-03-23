@@ -55,7 +55,10 @@ public class Process {
 
    /** Each process has its own stack */
    protected int [] stack;
-
+   
+   /** Pause the process? */
+   protected boolean paused;
+   
    /** Reference back to the parent interpreter */
    protected Interpreter in;
 
@@ -65,12 +68,14 @@ public class Process {
    
    
    public Process(Interpreter in, String name, int start) {
-      this.ip       = start;
+      this.ip       = -1;
       this.fp       = 0;
       this.sp       = 0;
       this.in       = in;
       this.name     = name;
       this.start    = start;
+      this.timer    = 0;
+      this.paused   = false;
       this.rand     = new java.util.Random();
       this.stack    = new int[MAX_STACK];
    }
@@ -87,23 +92,45 @@ public class Process {
    public String getName() {
       return this.name;
    }
+   
+   
+   public boolean isStopped() {
+      return this.ip < 0;
+   }
 
 
    public boolean isRunning() {
       return this.ip >= 0;
    }
+   
+   
+   public boolean isPaused() {
+      return isRunning() && paused;   
+   }
 
 
    public void restart() {
-      this.ip    = start;
-      this.fp    = 0;
-      this.sp    = 0;
-      this.timer = 0;
+      this.ip      = start;
+      this.fp      = 0;
+      this.sp      = 0;
+      this.timer   = 0;
+      this.paused  = false;
+   }
+   
+   
+   public void pause() {
+      this.paused = true;
+   }
+   
+   
+   public void resume() {
+      this.paused = false;
    }
    
    
    public void stop() {
       this.ip = -1;
+      this.paused = false;
    }
 
 
@@ -121,6 +148,8 @@ public class Process {
       String [] instr;
 
       while (ip >= 0) {
+         
+         if (paused) return true;
 
          line = in.getLine(ip++);
          if (line == null) {

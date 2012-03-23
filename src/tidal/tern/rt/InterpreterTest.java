@@ -44,7 +44,18 @@ public class InterpreterTest extends TestCase {
    
    
    
-   public class TestRobot implements Debugger {
+   public class TestRobot implements Debugger, Robot {
+      public boolean isConnected() { return false; }
+   
+      public void setAddress(String address) { }
+   
+      public void openConnection() { }
+   
+      public void closeConnection() { }
+   
+      public int getIcon() { return 0; }
+   
+      public void allStop() { }
       
       public void processStarted(Process p) {
          System.out.println("starting " + p.getName());   

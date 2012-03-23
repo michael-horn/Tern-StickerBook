@@ -36,7 +36,7 @@ import java.io.BufferedReader;
 public class Interpreter implements Runnable {
    
    /** Robot controlled by this interpreter */
-   protected Object robot;
+   protected Robot robot;
 
    /** Assembly instructions */
    protected List<String> code;
@@ -53,11 +53,6 @@ public class Interpreter implements Runnable {
    /** List of debuggers to send trace events */
    protected List<Debugger> debuggers;
 
-   /** Flag to stop the interpreter thread */
-   protected boolean stop;
-
-   /** Whether or not processes are running */
-   protected boolean running;
 
 
    public Interpreter() {
@@ -67,37 +62,88 @@ public class Interpreter implements Runnable {
       this.vars      = new java.util.ArrayList<Integer>();
       this.labels    = new java.util.HashMap<String, Integer>();
       this.debuggers = new java.util.ArrayList<Debugger>();
-      this.stop      = false;
-      this.running   = false;
+   }
+   
+   
+   public boolean isRunning() {
+      for (Process p : processes) {
+         if (p.isRunning()) return true;
+      }
+      return false;
+   }
+   
+   
+   public boolean isStopped() {
+      return !isRunning();
+   }
+   
+
+   public boolean isPaused() {
+      for (Process p : processes) {
+         if (p.isPaused()) return true;
+      }
+      return false;
    }
 
 
 /**
  * Start the interpreter in a separate thread
  */
-   public synchronized void start() {
-      if (!running) {
-         this.running = true;
-         (new Thread(this)).start();
+   public void start() {
+      for (Process p : processes) {
+         p.restart();
       }
+      (new Thread(this)).start();
    }
 
 
 /**
  * Stop the interpreter thread
  */
-   public synchronized void stop() {
-      if (!running) return;
-      this.stop = true;
-      this.running = false;
+   public void stop() {
+      for (Process p : processes) {
+         if (p.isRunning()) {
+            p.stop();
+         }
+      }
+      if (robot != null) {
+         robot.allStop();
+      }
+      sleep(100);
+   }
+   
+   
+   public void restart() {
+      stop();
+      start();
+   }
+   
+   
+   public void pause() {
+      if (isRunning()) {
+         for (Process p : processes) {
+            p.pause();
+         }
+         if (robot != null) {
+            robot.allStop();
+         }
+      }
+   }
+
+
+   public void resume() {
+      if (isRunning()) {
+         for (Process p : processes) {
+            p.resume();
+         }
+      }
    }
 
 
 /**
  * Stops the interpreter and clears all code, processes, and variables
  */
-   public synchronized void clear() {
-      stop();
+   public void clear() {
       this.code.clear();
       this.processes.clear();
       this.vars.clear();
@@ -119,25 +165,17 @@ public class Interpreter implements Runnable {
    }
 
 
-/**
- * Returns true if the interpreter is running
- */
-   public boolean isRunning() {
-      return this.running;
-   }
-
-
    public void addDebugger(Debugger d) {
       this.debuggers.add(d);
    }
    
    
-   public Object getRobot() {
+   public Robot getRobot() {
       return this.robot;
    }
    
    
-   public void setRobot(Object robot) {
+   public void setRobot(Robot robot) {
       this.robot = robot;
    }
 
@@ -202,19 +240,22 @@ public class Interpreter implements Runnable {
    public void run() {
       
       long temp, clock = System.currentTimeMillis();
+      boolean stopped = false;
 
-      while (!stop) {
-
+      while (!stopped) {
+         
          // service each process
+         stopped = true;
          for (Process p : processes) {
             if (p.isRunning()) {
-               if (!p.run()) {
+               if (p.run()) {
+                  stopped = false;
+               } else {
                   notifyProcessStopped(p);
                }
             }
          }
-         
-         if (stop) break;
+         if (stopped) break;
          
          // breathe
          try { Thread.sleep(20); }
@@ -225,8 +266,6 @@ public class Interpreter implements Runnable {
          clock = System.currentTimeMillis();
          updateTimers((int)(clock - temp));
       }
-      this.stop = false;
-      this.running = false;
    }
    
    
@@ -272,7 +311,6 @@ public class Interpreter implements Runnable {
    
    
    private void loadLine(String line) {
-      if (isRunning()) return;
       if (line == null || line.length() == 0) return;
       
       line = line.trim();
@@ -307,6 +345,12 @@ public class Interpreter implements Runnable {
       for (Process p : processes) {
          p.timerEvent(elapsed);
       }
+   }
+   
+   
+   protected void sleep(int ms) {
+      try { Thread.sleep(ms); }
+      catch (InterruptedException ix) { ; }
    }
 
 
