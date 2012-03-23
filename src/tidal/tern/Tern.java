@@ -37,6 +37,9 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 
 import java.io.File;
+import java.util.Date;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
 import com.lego.minddroid.DeviceListActivity;
 
 
@@ -52,9 +55,11 @@ public class Tern extends Activity {
    /** Main view for the app */
    protected ProgramView view;
    
-   /** Storage file for captured bitmaps */
+   /** Bitmap file */
    protected File temp;
    
+   /** Used to generate date stamps for file names */   
+   protected SimpleDateFormat sdf;
 
 
 //----------------------------------------------------------------   
@@ -74,12 +79,7 @@ public class Tern extends Activity {
       this.view = (ProgramView)findViewById(R.id.ProgramView);
       this.view.init(getApplicationContext(), this);
 
-      // Storage for captured bitmaps      
-      this.temp = new File(
-         Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES),
-         "capture.jpg");
-      
+      this.sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.US);
    }
    
    
@@ -117,6 +117,11 @@ public class Tern extends Activity {
    
    
    protected void captureBitmap() {
+      // Storage for captured bitmaps      
+      this.temp = new File(
+         Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_PICTURES),
+         "capture" + sdf.format(new Date()) + ".jpg");
       Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
       startActivityForResult(intent, CAMERA_REQUEST);
@@ -124,12 +129,20 @@ public class Tern extends Activity {
    
    
    protected void selectBitmap() {
+      /*
+      File dir = Environment.getExternalStoragePublicDirectory(
+               Environment.DIRECTORY_PICTURES);
       Intent intent = new Intent();
-      intent.setType("image/*");
+      intent.setAction(Intent.ACTION_PICK);
+      intent.setType("vnd.android.cursor.dir");
+      intent.setData(Uri.fromFile(dir));
+      startActivityForResult(intent, GALLERY_REQUEST);
+      */
+      
+      Intent intent = new Intent();
       intent.setAction(Intent.ACTION_GET_CONTENT);
-      startActivityForResult(
-            Intent.createChooser(intent, "Select Picture"),
-            GALLERY_REQUEST);
+      intent.setType("image/*");
+      startActivityForResult(intent, GALLERY_REQUEST);
    }
    
    
@@ -150,6 +163,7 @@ public class Tern extends Activity {
          case CAMERA_REQUEST:
             if (result == RESULT_OK) {
                try {
+                  sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
                   bitmap = Media.getBitmap(getContentResolver(), Uri.fromFile(temp) );
                   view.loadBitmap(bitmap);
                } catch (Exception x) {
