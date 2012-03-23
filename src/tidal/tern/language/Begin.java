@@ -43,9 +43,6 @@ public class Begin extends Statement {
       out.println("{");
       out.println("trace " + getCompileID());
       compileNext(out);
-      out.println("trace -1");
-      out.println("print \"Done!\"");
-      out.println("wait 1000");
       out.println("}");      
    }
 }
