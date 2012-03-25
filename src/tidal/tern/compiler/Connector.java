@@ -49,10 +49,6 @@ import java.io.PrintWriter;
    protected Statement other;
    
    
-   public Connector(Statement parent, int type) {
-      this(parent, type, "", 0, 0);
-   }
-   
    public Connector(Statement parent, int type, String name, float dx, float dy) {
       this.parent = parent;
       this.type = type;
