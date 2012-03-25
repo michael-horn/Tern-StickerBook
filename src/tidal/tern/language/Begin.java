@@ -39,30 +39,25 @@ public class Begin extends Statement {
    }
    
    
-   public void compile(PrintWriter out, boolean debug) throws CompileException {
-      Statement.NEST = 0;
-
-      //-------------------------------------------
-      // Compile a subroutine
-      //-------------------------------------------
+   public void compileSkill(PrintWriter out) throws CompileException {
       if (hasConnection("param")) {
-         StringWriter sw = new StringWriter();
-         PrintWriter pout = new PrintWriter(sw);
-         pout.println("def do" + getConnection("param").getName() + "():");
-         pout.println("{");
-         compileNext(pout, false);
-         pout.println("}");
-      }
-      
-      //-------------------------------------------
-      // Compile a process
-      //-------------------------------------------
-      else {
-         out.println("process main:");
+         out.println("def do" + getConnection("param").getName() + "():");
          out.println("{");
-         if (debug) out.println("trace " + getCompileID());
-         compileNext(out, true);
+         compileNext(out, false);
          out.println("}");
       }
    }
+   
+   
+   public void compile(PrintWriter out, boolean debug) throws CompileException {
+      Statement.NEST = 0;
+      if (!hasConnection("param")) {
+         out.println("process main:");
+         out.println("{");
+         if (debug) out.println("trace " + getCompileID());
+         if (debug) out.println("wait 500");
+         compileNext(out, true);
+         out.println("}");
+      }
+    }
 }
