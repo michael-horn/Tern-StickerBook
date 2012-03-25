@@ -43,6 +43,8 @@ public class Statement {
    
    
    private static int COMPILE_ID = 0;
+   
+   protected static int NEST = 0;
 
 
    /** Name of the statement */
@@ -89,22 +91,43 @@ public class Statement {
    public List<Connector> getConnectors() {
       return this.connectors;
    }
-
+   
+   
+   public boolean hasConnection(String name) {
+      for (Connector c : connectors) {
+         if (name.equals(c.getName())) {
+            return c.hasConnection();
+         }
+      }
+      return false;
+   }
+   
+   
+   public Statement getConnection(String name) {
+      for (Connector c : connectors) {
+         if (name.equals(c.getName())) {
+            return c.getConnection();
+         }
+      }
+      return null;
+   }
+   
    
 /**
  * Translates a tangible statement into a text-based representation
  */
-   public void compile(PrintWriter out) throws CompileException {
-      out.println("trace " + getCompileID());
+   public void compile(PrintWriter out, boolean debug) throws CompileException {
+      if (debug) out.println("trace " + getCompileID());
+      if (debug) out.println("print \"" + getName() + "\"");
       out.println(this.text);
-      compileNext(out);
+      compileNext(out, debug);
    }
    
    
-   protected void compileNext(PrintWriter out) throws CompileException {
+   protected void compileNext(PrintWriter out, boolean debug) throws CompileException {
       for (Connector c : connectors) {
          if (c.isOutgoing() && c.hasConnection()) {
-            c.getConnection().compile(out);
+            c.getConnection().compile(out, debug);
          }
       }
    }
@@ -183,8 +206,8 @@ public class Statement {
    public void setStartStatement(boolean start) {
       this.start = start;
    }
-
-
+   
+   
    public int getCompileID() {
       return this.c_id;
    }
@@ -192,7 +215,7 @@ public class Statement {
    
    public void connect(Statement other) {
       for (Connector plug : connectors) {
-         if (plug.isOutgoing()) {
+         if (plug.isOutgoing() || plug.isParameter()) {
             for (Connector socket : other.connectors) {
                if (socket.isIncoming()) {
                   if (socket.overlaps(plug)) {
