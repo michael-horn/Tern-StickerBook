@@ -11,19 +11,19 @@ import sendGrowl()
 
 def doBeep():
 {
-   BEEP()
+   sendBeep()
    wait 2000
 }
 
 def doSing():
 {
-   SING()
+   sendSing()
    wait 2000
 }
 
 def doGrowl():
 {
-   GROWL()
+   sendGrowl()
    wait 2000
 }
 
@@ -124,4 +124,9 @@ def doStarSkill():
 def doDiamondSkill():
 {
    wait 1000
+}
+
+def doEnd():
+{
+   wait 200
 }
