@@ -58,11 +58,15 @@ public class TangibleCompiler {
    /** Header include for generated text-based code */
    protected String header;
    
+   /** Redefined skills */
+   protected String skills;
+   
    
    public TangibleCompiler(Resources res, int statements, int driver) {
       this.scanner    = new Scanner();
       this.tcompiler  = new TextCompiler();
       this.header     = "";
+      this.skills     = "";
       
       try {
          
@@ -120,26 +124,41 @@ public class TangibleCompiler {
             }
          }
       }
-      
+
       
       //-----------------------------------------------------------
-      // 4. Convert the tangible program to a text-based program
+      // 4. Compile skills (subroutines)
       //-----------------------------------------------------------
       StringWriter sw = new StringWriter();
       PrintWriter out = new PrintWriter(sw);
 
       for (Statement s : program.getStatements()) {
          if (s.isStartStatement()) {
+            ((tidal.tern.language.Begin)s).compileSkill(out);
+         }
+      }
+      this.skills += sw.toString();
+      
+      
+      //-----------------------------------------------------------
+      // 5. Convert the tangible program to a text-based program
+      //-----------------------------------------------------------
+      sw = new StringWriter();
+      out = new PrintWriter(sw);
+
+      for (Statement s : program.getStatements()) {
+         if (s.isStartStatement()) {
             s.compile(out, true);
          }
       }
-      String tcode = header + "\n" + sw.toString();
+      
+      String tcode = header + "\n" + skills + "\n" + sw.toString();
       program.setTextCode(tcode);
       Log.i(TAG, tcode);
 
       
       //-----------------------------------------------------------
-      // 5. Convert the text-based code to assembly code
+      // 6. Convert the text-based code to assembly code
       //-----------------------------------------------------------
       String pcode = tcompiler.compile(tcode);
       program.setAssemblyCode(pcode);
