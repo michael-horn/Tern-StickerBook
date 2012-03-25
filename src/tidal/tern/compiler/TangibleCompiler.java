@@ -68,7 +68,7 @@ public class TangibleCompiler {
          
          // Initialize tangible StatementFactory
          StatementFactory.loadStatements(res.getXml(statements));
-      
+
          // Load driver code
          BufferedReader in = new BufferedReader(
             new InputStreamReader(res.openRawResource(driver)));
@@ -130,12 +130,12 @@ public class TangibleCompiler {
 
       for (Statement s : program.getStatements()) {
          if (s.isStartStatement()) {
-            s.compile(out);
+            s.compile(out, true);
          }
       }
       String tcode = header + "\n" + sw.toString();
       program.setTextCode(tcode);
-      Log.i("TangibleCompiler", tcode);
+      Log.i(TAG, tcode);
 
       
       //-----------------------------------------------------------
@@ -143,7 +143,7 @@ public class TangibleCompiler {
       //-----------------------------------------------------------
       String pcode = tcompiler.compile(tcode);
       program.setAssemblyCode(pcode);
-      Log.i("TangibleCompiler", pcode);
+      Log.i(TAG, pcode);
 
       return program;
    }
