@@ -108,8 +108,8 @@ public class NXTRobot implements Robot, BTConnectable {
    
    public void allStop() {
       sendBTCmessage(BTCommunicator.NO_DELAY, 0, 0, 0);
-      sendBTCmessage(BTCommunicator.NO_DELAY, 0, 0, 0);
-      sendBTCmessage(BTCommunicator.NO_DELAY, 0, 0, 0);
+      sendBTCmessage(BTCommunicator.NO_DELAY, 1, 0, 0);
+      sendBTCmessage(BTCommunicator.NO_DELAY, 2, 0, 0);
    }
    
    
@@ -128,14 +128,14 @@ public class NXTRobot implements Robot, BTConnectable {
    }
    
    
-   public int doBeep(int [] args) {
+   public int sendBeep(int [] args) {
       sendBTCmessage(BTCommunicator.NO_DELAY, BTCommunicator.DO_BEEP, 494, 100);
       sendBTCmessage(200, BTCommunicator.DO_BEEP, 440, 100);
       return 0;
    }
    
    
-   public int doSing(int [] args) {
+   public int sendSing(int [] args) {
       sendBTCmessage(BTCommunicator.NO_DELAY, BTCommunicator.DO_BEEP, 392, 100);
       sendBTCmessage(200, BTCommunicator.DO_BEEP, 440, 100);
       sendBTCmessage(400, BTCommunicator.DO_BEEP, 494, 100);
@@ -147,7 +147,7 @@ public class NXTRobot implements Robot, BTConnectable {
    }
    
    
-   public int doGrowl(int [] args) {
+   public int sendGrowl(int [] args) {
       return 0;
    }
 
