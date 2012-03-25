@@ -4,6 +4,7 @@
    <!-- BEGIN -->
    <statement code="569" name="Begin" start="true" class="tidal.tern.language.Begin">
       <plug dx="4.2" dy="0" name="next" />
+      <param dx="0" dy="4.2" name="param" />
    </statement>
    
    
@@ -72,9 +73,7 @@
       <socket name="prev" />
       <plug dx="4.2" dy="0" name="next" />
       <code>
-         print "Growl"
          doGrowl()
-         wait 2000
       </code>
    </statement>
    
@@ -84,9 +83,7 @@
       <socket name="prev" />
       <plug dx="4.2" dy="0" name="next" />
       <code>
-         print "Beep"
          doBeep()
-         wait 2000
       </code>
    </statement>
    
@@ -96,9 +93,7 @@
       <socket name="prev" />
       <plug dx="4.2" dy="0" name="next" />
       <code>
-         print "Sing"
          doSing()
-         wait 2000
       </code>
    </statement>
 
@@ -123,6 +118,26 @@
    </statement>
    
               
+   <!-- STAR SKILL -->
+   <statement code="279" name="StarSkill">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doStarSkill()
+      </code>
+   </statement>
+   
+              
+   <!-- DIAMOND SKILL -->
+   <statement code="285" name="DiamondSkill">
+      <socket name="prev" />
+      <plug dx="4.2" dy="0" name="next" />
+      <code>
+         doDiamondSkill()
+      </code>
+   </statement>
+   
+              
    <!-- TAP SENSOR (push down) -->
    <statement code="419" name="Tap Sensor">
       <socket name="prev" />
@@ -133,30 +148,19 @@
    </statement>
 
               
-   <!-- BEGIN REPEAT -->
-   <statement code="171" name="Begin Repeat">
-      <socket name="prev" />
-      <plug dx="2.9" dy="0" name="next" />
+   <!-- REPEAT -->
+   <statement code="171" name="Repeat" class="tidal.tern.language.Repeat">
+      <socket name="pstart" dx="2.0" dy="1.5" />
+      <socket name="pend" dx="-2.0" dy="-1.5" />
+      <plug dx="4.6" dy="1.5" name="nstart" />
+      <plug dx="-4.6" dy="-1.5" name="nend" />
       <code>
-         while true:
-         {
+         print "Repeat"
+         wait 2000
       </code>
    </statement>
 
 
-              
-   <!-- END REPEAT -->
-   <statement code="179" name="End Repeat">
-      <socket name="prev" />
-      <plug dx="2.9" dy="0" name="next" />
-      <code>
-            wait 100
-         }
-      </code>
-   </statement>
-
-
-              
    <!-- WAIT FOR -->
    <statement code="611" name="Wait For" class="tidal.tern.language.Wait">
       <socket name="prev" />
