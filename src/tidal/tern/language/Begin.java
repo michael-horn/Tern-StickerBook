@@ -20,6 +20,7 @@
 package tidal.tern.language;
 
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import tidal.tern.compiler.Statement;
 import tidal.tern.compiler.CompileException;
 import topcodes.TopCode;
@@ -36,13 +37,32 @@ public class Begin extends Statement {
    public Begin(TopCode top) {
       super(top);
    }
+   
+   
+   public void compile(PrintWriter out, boolean debug) throws CompileException {
+      Statement.NEST = 0;
 
-
-   public void compile(PrintWriter out) throws CompileException {
-      out.println("process main:");
-      out.println("{");
-      out.println("trace " + getCompileID());
-      compileNext(out);
-      out.println("}");      
+      //-------------------------------------------
+      // Compile a subroutine
+      //-------------------------------------------
+      if (hasConnection("param")) {
+         StringWriter sw = new StringWriter();
+         PrintWriter pout = new PrintWriter(sw);
+         pout.println("def do" + getConnection("param").getName() + "():");
+         pout.println("{");
+         compileNext(pout, false);
+         pout.println("}");
+      }
+      
+      //-------------------------------------------
+      // Compile a process
+      //-------------------------------------------
+      else {
+         out.println("process main:");
+         out.println("{");
+         if (debug) out.println("trace " + getCompileID());
+         compileNext(out, true);
+         out.println("}");
+      }
    }
 }
