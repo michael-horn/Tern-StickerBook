@@ -12,8 +12,7 @@
    <statement code="369" name="End">
       <socket name="prev" />
       <code>
-         print "Done!"
-         wait 200
+         doEnd()
       </code>
    </statement>
 
@@ -154,10 +153,6 @@
       <socket name="pend" dx="-2.0" dy="-1.5" />
       <plug dx="4.6" dy="1.5" name="nstart" />
       <plug dx="-4.6" dy="-1.5" name="nend" />
-      <code>
-         print "Repeat"
-         wait 2000
-      </code>
    </statement>
 
 
