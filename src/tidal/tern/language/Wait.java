@@ -38,12 +38,12 @@ public class Wait extends Statement {
    }
 
 
-   public void compile(PrintWriter out) throws CompileException {
-      out.println("trace " + getCompileID());
+   public void compile(PrintWriter out, boolean debug) throws CompileException {
+      if (debug) out.println("trace " + getCompileID());
       out.println("while not getTouchSensor():");
       out.println("{");
       out.println("   wait 100");
       out.println("}");      
-      compileNext(out);
+      compileNext(out, debug);
    }
 }
