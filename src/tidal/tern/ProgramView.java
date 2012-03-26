@@ -221,7 +221,7 @@ public class ProgramView extends View implements Debugger, Runnable {
    
    
 /**
- * Called from the GO/CAMERA button. Starts a tangible compile
+ * COMPILE PHASE 1: Called from the GO/CAMERA button. Starts a tangible compile
  * by launching a camera intent
  */
    public void startCompile(boolean capture) {
@@ -241,7 +241,11 @@ public class ProgramView extends View implements Debugger, Runnable {
       }
    }
    
-   
+
+/**
+ * COMPILE PHASE 2: Called from Tern when the bitmap is ready to be processed
+ * (after the user has taken a picture)
+ */
    public void loadBitmap(Bitmap bitmap) {
       if (bitmap != null) {
          this.compiling = true;
@@ -250,26 +254,12 @@ public class ProgramView extends View implements Debugger, Runnable {
          (new Thread(this)).start();
       }
    }
-   
-   
-   protected void finishCompile(boolean success) {
-      hideProgressDialog();
-      this.compiling = false;
-      if (!success) return;
-      
-      Log.i(TAG, "Compile Finished");
-      try {
-         interp.stop();
-         interp.clear();
-         interp.load(program.getAssemblyCode());
-         interp.start();
-         repaint();
-      } catch (Exception x) {
-         Log.e(TAG, "Interpreter error", x);
-      }
-   }
 
-   
+
+/**
+ * COMPILE PHASE 3: Processes the bitmap and then calls finishCompile via a
+ * handler
+ */
    public void run() {
       try {
          this.program = compiler.compile(this.bitmap);
@@ -281,6 +271,28 @@ public class ProgramView extends View implements Debugger, Runnable {
       }
    }
    
+   
+/**
+ * COMPILE PHASE 4: Called after the bitmap has been processed from a
+ * separate thread (via a handler).
+ */
+   protected void finishCompile(boolean success) {
+      hideProgressDialog();
+      this.compiling = false;
+      if (!success) return;
+      
+      Log.i(TAG, "Compile Finished");
+      try {
+         interp.stop();
+         interp.clear();
+         interp.load(program.getAssemblyCode());
+         //interp.start();
+         repaint();
+      } catch (Exception x) {
+         Log.e(TAG, "Interpreter error", x);
+      }
+   }
+
    
 /**
  * Handle button presses
