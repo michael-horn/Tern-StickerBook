@@ -24,6 +24,8 @@
  */
 package tidal.tern.rt;
 
+import android.graphics.Canvas;
+
 
 /**
  * This is a "robot" interface. The interpreter calls
@@ -41,10 +43,9 @@ public interface Robot {
    
    public void closeConnection();
    
-   /** Android resource ID for robot status icon */
-   public int getIcon();
-   
    /** Called when a program is stopped or paused by the user */
    public void allStop();
+   
+   public void draw(Canvas canvas);
    
 }
