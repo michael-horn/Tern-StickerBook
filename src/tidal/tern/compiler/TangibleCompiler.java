@@ -24,7 +24,7 @@
  */
 package tidal.tern.compiler;
 
-
+import java.util.Map;
 import java.util.List;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -59,14 +59,14 @@ public class TangibleCompiler {
    protected String header;
    
    /** Redefined skills */
-   protected String skills;
+   protected Map<String, String> skills;
    
    
    public TangibleCompiler(Resources res, int statements, int driver) {
       this.scanner    = new Scanner();
       this.tcompiler  = new TextCompiler();
       this.header     = "";
-      this.skills     = "";
+      this.skills     = new java.util.HashMap<String, String>();
       
       try {
          
@@ -129,22 +129,18 @@ public class TangibleCompiler {
       //-----------------------------------------------------------
       // 4. Compile skills (subroutines)
       //-----------------------------------------------------------
-      StringWriter sw = new StringWriter();
-      PrintWriter out = new PrintWriter(sw);
-
       for (Statement s : program.getStatements()) {
          if (s.isStartStatement()) {
-            ((tidal.tern.language.Begin)s).compileSkill(out);
+            ((tidal.tern.language.Begin)s).compileSkill(skills);
          }
       }
-      this.skills += sw.toString();
       
       
       //-----------------------------------------------------------
       // 5. Convert the tangible program to a text-based program
       //-----------------------------------------------------------
-      sw = new StringWriter();
-      out = new PrintWriter(sw);
+      StringWriter sw = new StringWriter();
+      PrintWriter out = new PrintWriter(sw);
 
       for (Statement s : program.getStatements()) {
          if (s.isStartStatement()) {
@@ -152,7 +148,12 @@ public class TangibleCompiler {
          }
       }
       
-      String tcode = header + "\n" + skills + "\n" + sw.toString();
+      String tcode = header + "\n";
+      for (String skill : skills.values()) {
+         tcode += skill + "\n";
+      }
+      
+      tcode += sw.toString();
       program.setTextCode(tcode);
       Log.i(TAG, tcode);
 
