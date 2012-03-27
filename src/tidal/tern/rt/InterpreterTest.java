@@ -57,6 +57,8 @@ public class InterpreterTest extends TestCase {
    
       public void allStop() { }
       
+      public void draw(android.graphics.Canvas canvas) { }
+      
       public void processStarted(Process p) {
          System.out.println("starting " + p.getName());   
       }
