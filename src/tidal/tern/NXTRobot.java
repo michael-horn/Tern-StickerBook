@@ -29,6 +29,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.graphics.Canvas;
 
 import com.lego.minddroid.BTConnectable;
 import com.lego.minddroid.BTCommunicator;
@@ -96,13 +97,11 @@ public class NXTRobot implements Robot, BTConnectable {
    }
    
    
+   public void draw(Canvas canvas) { }
+   
+   
    public boolean isPairing() {
       return pairing;
-   }
-   
-   
-   public int getIcon() {
-      return isConnected() ? R.drawable.nxt : R.drawable.nxt_fade;
    }
    
    
