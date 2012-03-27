@@ -21,6 +21,7 @@ package tidal.tern.language;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Map;
 import tidal.tern.compiler.Statement;
 import tidal.tern.compiler.CompileException;
 import topcodes.TopCode;
@@ -39,12 +40,16 @@ public class Begin extends Statement {
    }
    
    
-   public void compileSkill(PrintWriter out) throws CompileException {
+   public void compileSkill(Map<String, String> skills) throws CompileException {
       if (hasConnection("param")) {
-         out.println("def do" + getConnection("param").getName() + "():");
+         StringWriter sw = new StringWriter();
+         PrintWriter out = new PrintWriter(sw);
+         String name = "do" + getConnection("param").getName();
+         out.println("def " + name + "():");
          out.println("{");
          compileNext(out, false);
          out.println("}");
+         skills.put(name, sw.toString());
       }
    }
    
