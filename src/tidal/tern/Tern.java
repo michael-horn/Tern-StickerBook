@@ -58,6 +58,9 @@ public class Tern extends Activity {
    /** Bitmap file */
    protected File temp;
    
+   /** Bitmap directory */
+   protected File image_dir;
+   
    /** Used to generate date stamps for file names */   
    protected SimpleDateFormat sdf;
 
@@ -79,7 +82,10 @@ public class Tern extends Activity {
       this.view = (ProgramView)findViewById(R.id.ProgramView);
       this.view.init(getApplicationContext(), this);
 
-      this.sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.US);
+      this.sdf = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.US);
+      
+      this.image_dir = Environment.getExternalStoragePublicDirectory(
+                       Environment.DIRECTORY_PICTURES);
    }
    
    
@@ -118,10 +124,8 @@ public class Tern extends Activity {
    
    protected void captureBitmap() {
       // Storage for captured bitmaps      
-      this.temp = new File(
-         Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES),
-         "capture" + sdf.format(new Date()) + ".jpg");
+      this.temp = new File(image_dir,
+                           "capture" + sdf.format(new Date()) + ".jpg");
       Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
       startActivityForResult(intent, CAMERA_REQUEST);
@@ -129,16 +133,6 @@ public class Tern extends Activity {
    
    
    protected void selectBitmap() {
-      /*
-      File dir = Environment.getExternalStoragePublicDirectory(
-               Environment.DIRECTORY_PICTURES);
-      Intent intent = new Intent();
-      intent.setAction(Intent.ACTION_PICK);
-      intent.setType("vnd.android.cursor.dir");
-      intent.setData(Uri.fromFile(dir));
-      startActivityForResult(intent, GALLERY_REQUEST);
-      */
-      
       Intent intent = new Intent();
       intent.setAction(Intent.ACTION_GET_CONTENT);
       intent.setType("image/*");
@@ -163,7 +157,7 @@ public class Tern extends Activity {
          case CAMERA_REQUEST:
             if (result == RESULT_OK) {
                try {
-                  sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+                  //sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.fromFile(image_dir)));
                   bitmap = Media.getBitmap(getContentResolver(), Uri.fromFile(temp) );
                   view.loadBitmap(bitmap);
                } catch (Exception x) {
