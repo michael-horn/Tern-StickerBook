@@ -131,15 +131,17 @@ public class ProgramView extends View implements Debugger, Runnable {
       
       //------------------------------------------------------
       // Initialize the tangible compiler
+      // Use nxt_statements and nxt_driver for LEGO NXT
       //------------------------------------------------------
       this.compiler = new TangibleCompiler(getResources(),
-                                           R.xml.nxt_statements,
-                                           R.raw.nxt_driver);
+                                           R.xml.roberto_statements,
+                                           R.raw.roberto_driver);
       
       //------------------------------------------------------
       // Initialize the "robot" connection manager
       //------------------------------------------------------
-      this.robot = new NXTRobot(this);
+      //this.robot = new NXTRobot(this);
+      this.robot = new Roberto(this);
       this.robot.openConnection();
 
       //------------------------------------------------------
@@ -195,10 +197,15 @@ public class ProgramView extends View implements Debugger, Runnable {
       
       this.config =
       new TButton(getResources(),
-                  R.drawable.config,
-                  R.drawable.config_dn,
-                  R.drawable.config_off,
-                  configHandler);
+                  R.drawable.roberto,
+                  R.drawable.roberto,
+                  R.drawable.roberto,
+                  emptyHandler);
+      //new TButton(getResources(),
+      //            R.drawable.config,
+      //            R.drawable.config_dn,
+      //            R.drawable.config_off,
+      //            configHandler);
    }
    
    
@@ -376,6 +383,9 @@ public class ProgramView extends View implements Debugger, Runnable {
          canvas.restore();
       }
       
+      // Draw robot
+      this.robot.draw(canvas);
+      
       // Draw CAMERA button
       dw = this.camera.getWidth();
       dh = this.camera.getHeight();
@@ -393,9 +403,9 @@ public class ProgramView extends View implements Debugger, Runnable {
       // Draw CONFIG button 
       this.config.setLocation(3, h - config.getHeight() - 3);
       this.config.setEnabled( true );
-      this.config.setUpImage(
-            getResources(),
-            robot.isConnected() ? R.drawable.config : R.drawable.config_off );
+      //this.config.setUpImage(
+      //      getResources(),
+      //      robot.isConnected() ? R.drawable.config : R.drawable.config_off );
       this.config.draw(canvas);
 
       // Draw play control toolbox
@@ -490,6 +500,10 @@ public class ProgramView extends View implements Debugger, Runnable {
       repaintHandler.sendEmptyMessage(0);
    }
    
+   public void repaint(int delay_ms) {
+      repaintHandler.sendEmptyMessageDelayed(0, delay_ms);
+   }
+   
    private Handler compileHandler = new Handler() {
       @Override
       public void handleMessage(Message msg) {
@@ -536,6 +550,12 @@ public class ProgramView extends View implements Debugger, Runnable {
    private Handler configHandler = new Handler() {
       @Override public void handleMessage(Message msg) {
          tern.selectBluetoothDevice();
+      }
+   };
+   
+   private Handler emptyHandler = new Handler() {
+      @Override public void handleMessage(Message msg) {
+
       }
    };
 }
