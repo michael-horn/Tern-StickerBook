@@ -28,6 +28,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.content.res.Resources;
 import android.util.Log;
+import java.util.Map;
 
 import tidal.tern.rt.Robot;
 
@@ -38,12 +39,24 @@ import tidal.tern.rt.Robot;
 public class Roberto implements Robot {
    
    public static final String TAG = "Roberto";
+
+   /** Frame rate constant (milliseconds) */   
+   private static final int DURATION = 200;
+   
    
    /** Reference to the View object */
    protected ProgramView view;
    
-   /** Roberto picture to draw */
-   protected Drawable pose = null;
+   /** Current frame index to be drawn */
+   private int frame = 0;
+   
+   /** Frame count for current animation pose */
+   private int fcount = 0;
+      
+   /** Name of current animation */   
+   private String pose = null;
+   
+   private long last_tick = 0;
    
    
    public Roberto(ProgramView view) {
@@ -51,87 +64,118 @@ public class Roberto implements Robot {
    }
    
    
+   /**
+    * These functions are inherited from the Robot interface but not
+    * needed for Roberto.
+    */
    public boolean isConnected() { return true; }
    public void setAddress(String address) {  }
    public void openConnection() { }
    public void closeConnection() { }
-   public void allStop() { }
+   public void allStop() {
+      frame = fcount;
+   }
+   
+   
+   private void drawFrame(Canvas canvas) {
+      if (pose != null)  {
+      
+         // Determine the resource id and load the drawable
+         Resources res = view.getResources();
+         String name = pose + "0" + (int)Math.min(frame, fcount);
+         Log.i(TAG, name);
+         int id = res.getIdentifier(name, "drawable", "tidal.tern");
+         Drawable current = res.getDrawable(id);
+         
+         // Draw the frame
+         if (current != null) {
+            int w = view.getWidth();
+            int h = view.getHeight();
+            int dw = current.getIntrinsicWidth();
+            int dh = current.getIntrinsicHeight();
+            int dx = w/2 - dw/2;
+            int dy = h/2 - dh/2;
+            current.setBounds(dx, dy, dx + dw, dy + dh);
+            current.draw(canvas);
+         }
+      }
+   }
    
    
    public void draw(Canvas canvas) {
-      int w = view.getWidth();
-      int h = view.getHeight();
-      int dx, dy, dw, dh;
-      float ds;
       
-      if (this.pose != null) {
-         dw = pose.getIntrinsicWidth() / 3;
-         dh = pose.getIntrinsicHeight() / 3;
-         dx = w/2 - dw/2;
-         dy = h/2 - dh/2;
-         pose.setBounds(dx, dy, dx + dw, dy + dh);
-         pose.draw(canvas);
+      long elapsed = (System.currentTimeMillis() - last_tick);
+      
+      if (elapsed >= DURATION) {
+         if (frame <= fcount) {
+            last_tick = System.currentTimeMillis();
+            frame++;
+         }
       }
+      drawFrame(canvas);
+      view.repaint(DURATION);  // repaint after delay of 200 ms
    }
 
    
-   private void changePicture(int d) {
-      Resources res = view.getResources();
-      this.pose = (d > 0)? res.getDrawable(d) : null;
+   private void changePicture(String pose, int frame_count) {
+      this.pose = pose;
+      this.fcount = frame_count;
+      this.frame = 1;
+      this.last_tick = 0;
       view.repaint();
    }
    
    
    public int doJump(int [] args) {
-      changePicture(R.drawable.r_jump);
+      changePicture("jump", 5);
       return 0;
    }
    
    
    public int doRun(int [] args) {
-      changePicture(R.drawable.r_run);
+      changePicture("run", 1);
       return 0;
    }
    
    
    public int doWalk(int [] args) {
-      changePicture(R.drawable.r_walk);
+      changePicture("walk", 5);
       return 0;
    }
    
    
    public int doWiggle(int [] args) {
-      changePicture(R.drawable.r_wiggle);
+      changePicture("wiggle", 1);
       return 0;
    }
    
    
    public int doSleep(int [] args) {
-      changePicture(R.drawable.r_sleep);
+      changePicture("sleep", 1);
       return 0;
    }
    
    
    public int doSit(int [] args) {
-      changePicture(R.drawable.r_sit);
+      changePicture("sit", 1);
       return 0;
    }
    
    
    public int doYawn(int [] args) {
-      changePicture(R.drawable.r_yawn);
+      changePicture("yawn", 1);
       return 0;
    }
    
    
    public int doStand(int [] args) {
-      changePicture(R.drawable.r_stand);
+      changePicture("stand", 1);
       return 0;
    }
    
    
    public int doSpin(int [] args) {
-      changePicture(R.drawable.r_spin);
+      changePicture("spin", 1);
       return 0;
    }
    
