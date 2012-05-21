@@ -134,14 +134,14 @@ public class ProgramView extends View implements Debugger, Runnable {
       // Use nxt_statements and nxt_driver for LEGO NXT
       //------------------------------------------------------
       this.compiler = new TangibleCompiler(getResources(),
-                                           R.xml.roberto_statements,
-                                           R.raw.roberto_driver);
+                                           R.xml.nxt_statements,
+                                           R.raw.nxt_driver);
       
       //------------------------------------------------------
       // Initialize the "robot" connection manager
       //------------------------------------------------------
-      //this.robot = new NXTRobot(this);
-      this.robot = new Roberto(this);
+      this.robot = new NXTRobot(this);
+      //this.robot = new Roberto(this);
       this.robot.openConnection();
 
       //------------------------------------------------------
@@ -195,17 +195,17 @@ public class ProgramView extends View implements Debugger, Runnable {
                   R.drawable.restart_off,
                   restartHandler);
       
-      this.config =
-      new TButton(getResources(),
-                  R.drawable.roberto,
-                  R.drawable.roberto,
-                  R.drawable.roberto,
-                  emptyHandler);
+      //this.config =
       //new TButton(getResources(),
-      //            R.drawable.config,
-      //            R.drawable.config_dn,
-      //            R.drawable.config_off,
-      //            configHandler);
+      //            R.drawable.roberto,
+      //            R.drawable.roberto,
+      //            R.drawable.roberto,
+      //            emptyHandler);
+      new TButton(getResources(),
+                  R.drawable.config,
+                  R.drawable.config_dn,
+                  R.drawable.config_off,
+                  configHandler);
    }
    
    
